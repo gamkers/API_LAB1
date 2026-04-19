@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GAMKERS — API Hacking Lab v2</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080b10;
+  --s1: #0e1219;
+  --s2: #141920;
+  --s3: #1c2230;
+  --border: #232b3a;
+  --border2: #2e3a4e;
+  --accent: #00e5ff;
+  --accent-dim: rgba(0,229,255,0.08);
+  --accent-glow: rgba(0,229,255,0.25);
+  --red: #ff4455;
+  --red-dim: rgba(255,68,85,0.1);
+  --green: #00e5a0;
+  --green-dim: rgba(0,229,160,0.1);
+  --yellow: #ffc940;
+  --yellow-dim: rgba(255,201,64,0.1);
+  --purple: #b06fff;
+  --purple-dim: rgba(176,111,255,0.1);
+  --orange: #ff8c42;
+  --orange-dim: rgba(255,140,66,0.1);
+  --text: #d4dce8;
+  --muted: #556070;
+  --muted2: #7a8898;
+  --mono: 'JetBrains Mono', monospace;
+  --display: 'Syne', sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:var(--mono);font-size:13px;display:flex;flex-direction:column}
+
+/* ── TOP NAV ── */
+nav{display:flex;align-items:center;gap:0;border-bottom:1px solid var(--border);background:var(--s1);flex-shrink:0;height:44px}
+.nav-logo{padding:0 20px;font-family:var(--display);font-size:15px;color:var(--accent);letter-spacing:1px;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;gap:8px}
+.nav-logo span{color:var(--muted2);font-size:11px;font-family:var(--mono);font-weight:400;letter-spacing:0}
+.nav-tabs{display:flex;height:100%}
+.nav-tab{padding:0 18px;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);border-right:1px solid var(--border);cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .15s;border-bottom:2px solid transparent}
+.nav-tab:hover{color:var(--text);background:var(--s2)}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);background:var(--accent-dim)}
+.nav-tab .dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.6}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:0;height:100%}
+.vuln-indicator{padding:0 16px;font-size:10px;letter-spacing:1.5px;color:var(--red);border-left:1px solid var(--border);height:100%;display:flex;align-items:center;gap:6px}
+.vuln-indicator::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--red);animation:blink 1.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.session-info{padding:0 16px;border-left:1px solid var(--border);height:100%;display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted2)}
+.session-badge{background:var(--green-dim);color:var(--green);padding:2px 8px;border-radius:3px;font-size:10px}
+
+/* ── MAIN LAYOUT ── */
+.workspace{display:grid;grid-template-columns:260px 1fr 300px;flex:1;overflow:hidden;min-height:0}
+
+/* ── LEFT PANEL ── */
+.left-panel{border-right:1px solid var(--border);background:var(--s1);display:flex;flex-direction:column;overflow:hidden}
+.panel-header{padding:10px 14px;border-bottom:1px solid var(--border);font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;display:flex;align-items:center;gap:6px;flex-shrink:0}
+.panel-header .ph-icon{color:var(--accent);font-size:12px}
+
+/* Vuln Selector */
+.vuln-list{padding:8px;border-bottom:1px solid var(--border);flex-shrink:0}
+.vuln-btn{width:100%;text-align:left;padding:8px 10px;border-radius:5px;border:1px solid var(--border);background:transparent;color:var(--muted2);cursor:pointer;margin-bottom:4px;display:flex;align-items:center;gap:8px;transition:all .15s;font-family:var(--mono);font-size:11px}
+.vuln-btn:last-child{margin-bottom:0}
+.vuln-btn:hover{background:var(--s2);color:var(--text);border-color:var(--border2)}
+.vuln-btn.active{background:var(--red-dim);border-color:rgba(255,68,85,.4);color:var(--red)}
+.vuln-btn .vb-icon{font-size:14px;width:18px;text-align:center}
+.vuln-btn .vb-info{display:flex;flex-direction:column;gap:1px}
+.vuln-btn .vb-name{font-size:11px;font-weight:600}
+.vuln-btn .vb-desc{font-size:10px;opacity:.6}
+.vuln-btn .vb-sev{margin-left:auto;font-size:9px;padding:1px 6px;border-radius:2px;font-weight:700}
+.sev-critical{background:rgba(255,68,85,.2);color:var(--red)}
+.sev-high{background:rgba(255,140,66,.2);color:var(--orange)}
+.sev-medium{background:rgba(255,201,64,.2);color:var(--yellow)}
+
+/* User List */
+.user-scroll{flex:1;overflow-y:auto;padding:8px}
+.user-card{padding:8px 10px;border-radius:5px;border:1px solid var(--border);background:var(--s2);margin-bottom:4px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:10px}
+.user-card:hover{border-color:var(--border2);background:var(--s3)}
+.user-card.active{border-color:var(--accent);background:var(--accent-dim)}
+.avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.user-info{flex:1;min-width:0}
+.user-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-sub{font-size:10px;color:var(--muted2);margin-top:1px}
+.user-role{font-size:9px;padding:1px 5px;border-radius:2px;margin-left:auto;flex-shrink:0}
+.role-admin{background:rgba(255,201,64,.15);color:var(--yellow)}
+.role-user{background:rgba(0,229,255,.1);color:var(--accent)}
+.role-manager{background:rgba(176,111,255,.15);color:var(--purple)}
+
+/* ── CENTER PANEL ── */
+.center-panel{display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
+
+/* Request Builder */
+.req-builder{padding:12px 16px;border-bottom:1px solid var(--border);background:var(--s1);flex-shrink:0}
+.req-row{display:flex;gap:6px;align-items:center;margin-bottom:8px}
+.method-badge{padding:7px 12px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:.5px;cursor:pointer;border:1px solid;flex-shrink:0}
+.mb-get{background:var(--green-dim);color:var(--green);border-color:rgba(0,229,160,.3)}
+.mb-put{background:var(--yellow-dim);color:var(--yellow);border-color:rgba(255,201,64,.3)}
+.mb-post{background:var(--purple-dim);color:var(--purple);border-color:rgba(176,111,255,.3)}
+.url-bar{flex:1;background:var(--s2);border:1px solid var(--border);border-radius:4px;display:flex;align-items:center;padding:0 10px;gap:4px;font-size:12px;overflow:hidden}
+.url-static{color:var(--muted2);white-space:nowrap;flex-shrink:0}
+.url-input{background:transparent;border:none;outline:none;color:var(--yellow);font-family:var(--mono);font-size:12px;font-weight:600;width:60px;padding:7px 0}
+.url-extra{color:var(--muted);white-space:nowrap;flex-shrink:0;font-size:11px}
+.send-btn{padding:7px 16px;background:var(--accent);color:#000;border:none;border-radius:4px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.5px;flex-shrink:0;transition:all .15s}
+.send-btn:hover{background:#33ecff;transform:translateY(-1px)}
+.send-btn:active{transform:translateY(0)}
+
+/* Headers & Body tabs */
+.sub-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--s1);flex-shrink:0}
+.sub-tab{padding:6px 14px;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s}
+.sub-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.sub-tab:hover{color:var(--text)}
+.tab-badge{background:var(--red-dim);color:var(--red);padding:1px 5px;border-radius:2px;font-size:9px;margin-left:4px}
+
+/* Headers panel */
+.headers-panel{padding:10px 14px;border-bottom:1px solid var(--border);background:var(--s1);flex-shrink:0;font-size:11px;max-height:120px;overflow-y:auto}
+.hdr-row{display:flex;gap:8px;padding:3px 0;border-bottom:1px solid rgba(35,43,58,.5);align-items:center}
+.hdr-row:last-child{border-bottom:none}
+.hdr-key{color:var(--purple);width:160px;flex-shrink:0}
+.hdr-val{color:var(--muted2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hdr-val.sensitive{color:var(--yellow)}
+.hdr-val.accent{color:var(--accent)}
+
+/* Body editor */
+.body-editor{padding:10px 14px;border-bottom:1px solid var(--border);background:var(--s1);flex-shrink:0;display:none}
+.body-textarea{width:100%;background:var(--s2);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:var(--mono);font-size:11px;padding:8px;outline:none;resize:vertical;min-height:70px;max-height:120px;line-height:1.6}
+.body-textarea:focus{border-color:var(--border2)}
+
+/* Response */
+.response-area{flex:1;overflow-y:auto;padding:14px 16px}
+.res-status-bar{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.res-status{font-size:13px;font-weight:700}
+.status-200{color:var(--green)}
+.status-403{color:var(--red)}
+.status-429{color:var(--orange)}
+.status-404{color:var(--muted2)}
+.res-time{color:var(--muted);font-size:11px}
+.res-size{color:var(--muted);font-size:11px}
+
+.alert-box{border-radius:5px;padding:10px 12px;margin-bottom:10px;font-size:11px;line-height:1.6;display:flex;gap:8px}
+.alert-icon{font-size:15px;flex-shrink:0;margin-top:1px}
+.alert-vuln{background:var(--red-dim);border:1px solid rgba(255,68,85,.3);color:var(--red)}
+.alert-ok{background:var(--green-dim);border:1px solid rgba(0,229,160,.3);color:var(--green)}
+.alert-warn{background:var(--yellow-dim);border:1px solid rgba(255,201,64,.3);color:var(--yellow)}
+.alert-info{background:var(--accent-dim);border:1px solid rgba(0,229,255,.2);color:var(--accent)}
+.alert-rate{background:var(--orange-dim);border:1px solid rgba(255,140,66,.3);color:var(--orange)}
+
+.json-block{background:var(--s1);border:1px solid var(--border);border-radius:6px;padding:14px;font-size:12px;line-height:1.9;white-space:pre-wrap}
+.jk{color:#6eb3f7}.js{color:#a8d8a0}.jn{color:var(--yellow)}.jb{color:var(--purple)}
+.jleak{color:var(--red);font-weight:700;text-decoration:underline;text-decoration-style:wavy;text-decoration-color:rgba(255,68,85,.5)}
+.jown{color:var(--green);font-weight:600}
+.jmodified{color:var(--orange);font-weight:600}
+
+/* Rate limit meter */
+.rate-meter{background:var(--s1);border:1px solid var(--border);border-radius:5px;padding:10px 12px;margin-bottom:10px}
+.rate-label{font-size:10px;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between}
+.rate-bar{height:6px;background:var(--s3);border-radius:3px;overflow:hidden}
+.rate-fill{height:100%;border-radius:3px;transition:width .3s,background .3s}
+
+/* ── RIGHT PANEL: Defender + Log ── */
+.right-panel{border-left:1px solid var(--border);background:var(--s1);display:flex;flex-direction:column;overflow:hidden}
+.right-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
+.rt{flex:1;padding:8px;font-size:10px;letter-spacing:1px;text-transform:uppercase;text-align:center;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:all .15s}
+.rt.active{color:var(--accent);border-bottom-color:var(--accent);background:var(--accent-dim)}
+.rt:hover{color:var(--text)}
+
+/* Defender */
+.defender-scroll{flex:1;overflow-y:auto;padding:10px}
+.def-section{margin-bottom:12px}
+.def-title{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid var(--border)}
+.def-toggle{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;background:var(--s2);border:1px solid var(--border);border-radius:4px;margin-bottom:4px;cursor:pointer;transition:all .15s}
+.def-toggle:hover{border-color:var(--border2)}
+.def-label{font-size:11px;display:flex;flex-direction:column;gap:2px}
+.def-sublabel{font-size:9px;color:var(--muted);font-weight:400}
+.toggle-sw{width:32px;height:17px;border-radius:9px;border:1px solid var(--border2);position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+.toggle-sw.on{background:var(--green);border-color:var(--green)}
+.toggle-sw.off{background:var(--s3)}
+.toggle-sw::after{content:'';width:11px;height:11px;border-radius:50%;background:#fff;position:absolute;top:2px;transition:left .2s}
+.toggle-sw.on::after{left:17px}
+.toggle-sw.off::after{left:2px}
+
+.defense-status{padding:8px 10px;background:var(--s2);border:1px solid var(--border);border-radius:4px;font-size:10px;line-height:1.6;color:var(--muted2)}
+.defense-status.blocked{background:var(--green-dim);border-color:rgba(0,229,160,.3);color:var(--green)}
+.defense-status.vulnerable{background:var(--red-dim);border-color:rgba(255,68,85,.3);color:var(--red)}
+
+/* Attack Log */
+.log-scroll{flex:1;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:4px}
+.log-entry{padding:7px 10px;background:var(--s2);border:1px solid var(--border);border-radius:4px;font-size:10px;line-height:1.5;display:flex;gap:8px;align-items:flex-start}
+.log-time{color:var(--muted);flex-shrink:0;font-size:9px;padding-top:1px}
+.log-body{flex:1}
+.log-tag{display:inline-block;padding:1px 5px;border-radius:2px;font-size:9px;font-weight:700;margin-right:4px}
+.tag-attack{background:var(--red-dim);color:var(--red)}
+.tag-blocked{background:var(--green-dim);color:var(--green)}
+.tag-ok{background:rgba(0,229,255,.1);color:var(--accent)}
+.tag-rate{background:var(--orange-dim);color:var(--orange)}
+.log-msg{color:var(--text)}
+.log-detail{color:var(--muted2);font-size:9px;margin-top:2px}
+
+.log-empty{color:var(--muted);font-size:11px;text-align:center;margin-top:30px}
+
+/* Quick actions bar */
+.quick-bar{padding:8px 14px;border-top:1px solid var(--border);background:var(--s1);flex-shrink:0;display:flex;gap:6px;flex-wrap:wrap}
+.quick-btn{padding:4px 10px;border-radius:3px;border:1px solid var(--border);background:var(--s2);color:var(--muted2);font-family:var(--mono);font-size:10px;cursor:pointer;transition:all .12s;white-space:nowrap}
+.quick-btn:hover{border-color:var(--red);color:var(--red);background:var(--red-dim)}
+
+/* Scrollbars */
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* Exploit scenario cards */
+.scenario-strip{padding:8px 14px;border-bottom:1px solid var(--border);background:var(--s1);flex-shrink:0;display:flex;gap:6px;overflow-x:auto}
+.scenario-chip{padding:4px 10px;border-radius:3px;border:1px solid var(--border);background:var(--s2);color:var(--muted2);font-size:10px;cursor:pointer;transition:all .12s;white-space:nowrap;flex-shrink:0}
+.scenario-chip:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
+.scenario-chip.active{border-color:var(--red);color:var(--red);background:var(--red-dim)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">GAMKERS <span>/ API LAB v2</span></div>
+  <div class="nav-tabs">
+    <div class="nav-tab active"><span class="dot"></span>API Console</div>
+    <div class="nav-tab" style="opacity:.4;cursor:default">Fuzzer</div>
+    <div class="nav-tab" style="opacity:.4;cursor:default">Auth Bypass</div>
+  </div>
+  <div class="nav-right">
+    <div class="vuln-indicator">LIVE LAB</div>
+    <div class="session-info">Logged in as <span class="session-badge" id="sessionLabel">nobody</span></div>
+  </div>
+</nav>
+
+<div class="workspace">
+
+  <!-- ── LEFT: Vuln selector + Users ── -->
+  <div class="left-panel">
+    <div class="panel-header"><span class="ph-icon">◈</span> Attack Type</div>
+    <div class="vuln-list" id="vulnList"></div>
+    <div class="panel-header"><span class="ph-icon">◈</span> Login as User</div>
+    <div class="user-scroll" id="userScroll"></div>
+  </div>
+
+  <!-- ── CENTER: Request / Response ── -->
+  <div class="center-panel">
+    <!-- Scenario strip -->
+    <div class="scenario-strip" id="scenarioStrip"></div>
+
+    <!-- Request builder -->
+    <div class="req-builder">
+      <div class="req-row">
+        <div class="method-badge mb-get" id="methodBadge">GET</div>
+        <div class="url-bar">
+          <span class="url-static" id="urlStatic">http://api.techcorp.in/api/</span>
+          <input class="url-input" id="urlPath" value="users/1" />
+        </div>
+        <button class="send-btn" onclick="sendRequest()">▶ Send</button>
+      </div>
+      <!-- Headers row -->
+      <div style="display:flex;gap:8px;align-items:center;font-size:10px;flex-wrap:wrap">
+        <span style="color:var(--muted)">Authorization:</span>
+        <span style="color:var(--accent);font-size:10px" id="tokenPreview">— not logged in —</span>
+        <span id="rateMeterInline" style="margin-left:auto;font-size:10px;color:var(--muted)"></span>
+      </div>
+    </div>
+
+    <!-- Sub tabs -->
+    <div class="sub-tabs">
+      <div class="sub-tab active" onclick="switchSubTab('headers',this)">Request Headers</div>
+      <div class="sub-tab" onclick="switchSubTab('body',this)">Body <span class="tab-badge" id="bodyBadge" style="display:none">JSON</span></div>
+      <div class="sub-tab" onclick="switchSubTab('res-headers',this)">Response Headers</div>
+    </div>
+
+    <!-- Request headers panel -->
+    <div class="headers-panel" id="reqHeadersPanel">
+      <div style="color:var(--muted);font-size:11px">// Login first to populate headers</div>
+    </div>
+
+    <!-- Body editor -->
+    <div class="body-editor" id="bodyEditor">
+      <textarea class="body-textarea" id="bodyInput" placeholder='// Request body (JSON)&#10;{}'></textarea>
+    </div>
+
+    <!-- Response headers panel (hidden initially) -->
+    <div class="headers-panel" id="resHeadersPanel" style="display:none"></div>
+
+    <!-- Response -->
+    <div class="response-area" id="responseArea">
+      <div class="log-empty">// Send a request to see the response</div>
+    </div>
+  </div>
+
+  <!-- ── RIGHT: Defender + Log ── -->
+  <div class="right-panel">
+    <div class="right-tabs">
+      <div class="rt active" onclick="switchRightTab('defender',this)">Defender</div>
+      <div class="rt" onclick="switchRightTab('log',this)">Attack Log <span id="logCount" style="background:var(--red-dim);color:var(--red);padding:1px 5px;border-radius:2px;font-size:9px;margin-left:3px">0</span></div>
+    </div>
+
+    <!-- Defender panel -->
+    <div id="defenderPanel" class="defender-scroll">
+      <div class="def-section">
+        <div class="def-title">Authorization Controls</div>
+        <div class="def-toggle" onclick="toggleDefense('ownership')">
+          <div class="def-label">Object Ownership Check <div class="def-sublabel">Verify user owns the resource</div></div>
+          <div class="toggle-sw off" id="tog-ownership"></div>
+        </div>
+        <div class="def-toggle" onclick="toggleDefense('rolecheck')">
+          <div class="def-label">Role-Based Access <div class="def-sublabel">Admin/manager routes protected</div></div>
+          <div class="toggle-sw off" id="tog-rolecheck"></div>
+        </div>
+      </div>
+      <div class="def-section">
+        <div class="def-title">Mass Assignment</div>
+        <div class="def-toggle" onclick="toggleDefense('massassign')">
+          <div class="def-label">Field Allowlist <div class="def-sublabel">Block role/balance writes</div></div>
+          <div class="toggle-sw off" id="tog-massassign"></div>
+        </div>
+      </div>
+      <div class="def-section">
+        <div class="def-title">Rate Limiting</div>
+        <div class="def-toggle" onclick="toggleDefense('ratelimit')">
+          <div class="def-label">Request Rate Limit <div class="def-sublabel">5 req/10s per token</div></div>
+          <div class="toggle-sw off" id="tog-ratelimit"></div>
+        </div>
+        <div class="def-toggle" onclick="toggleDefense('lockout')">
+          <div class="def-label">Auto Lockout <div class="def-sublabel">Block after limit breach</div></div>
+          <div class="toggle-sw off" id="tog-lockout"></div>
+        </div>
+      </div>
+      <div class="def-section">
+        <div class="def-title">Current Status</div>
+        <div class="defense-status vulnerable" id="defenseStatus">
+          ⚠ All defenses OFF — app is fully vulnerable. Toggle controls above to fix.
+        </div>
+      </div>
+    </div>
+
+    <!-- Attack log panel -->
+    <div id="logPanel" style="flex:1;overflow-y:auto;padding:8px;display:none;flex-direction:column;gap:4px" class="log-scroll">
+      <div class="log-empty" id="logEmpty">// No requests yet</div>
+    </div>
+
+    <!-- Quick attack bar -->
+    <div class="quick-bar">
+      <div style="font-size:9px;color:var(--muted);width:100%;margin-bottom:2px;letter-spacing:1px">QUICK EXPLOITS</div>
+      <div class="quick-btn" onclick="quickAttack('idor_sweep')">IDOR Sweep</div>
+      <div class="quick-btn" onclick="quickAttack('mass_assign')">Mass Assign</div>
+      <div class="quick-btn" onclick="quickAttack('rate_flood')">Rate Flood</div>
+      <div class="quick-btn" onclick="quickAttack('admin_esc')">Admin Esc.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATABASE ──
+const DB = {
+  1:{id:1,name:"Arun Kumar",email:"arun@techcorp.in",role:"admin",phone:"+91-98456-11001",card:"4111-1111-1111-1001",balance:240000,dob:"1990-04-12",department:"Engineering",salary:180000},
+  2:{id:2,name:"Divya Nair",email:"divya@techcorp.in",role:"user",phone:"+91-98456-22002",card:"4111-1111-1111-2002",balance:18500,dob:"1995-07-23",department:"Marketing",salary:65000},
+  3:{id:3,name:"Karthik Raja",email:"karthik@techcorp.in",role:"user",phone:"+91-98456-33003",card:"4111-1111-1111-3003",balance:55200,dob:"1992-11-05",department:"Engineering",salary:85000},
+  4:{id:4,name:"Priya Sharma",email:"priya@techcorp.in",role:"manager",phone:"+91-98456-44004",card:"4111-1111-1111-4004",balance:120000,dob:"1988-02-17",department:"HR",salary:130000},
+  5:{id:5,name:"Ravi Subbu",email:"ravi@techcorp.in",role:"user",phone:"+91-98456-55005",card:"4111-1111-1111-5005",balance:9300,dob:"1998-09-30",department:"Support",salary:45000},
+  6:{id:6,name:"Sneha Mehta",email:"sneha@techcorp.in",role:"user",phone:"+91-98456-66006",card:"4111-1111-1111-6006",balance:37800,dob:"1993-06-14",department:"Finance",salary:72000},
+};
+
+// ── STATE ──
+let loggedInId = null;
+let defenses = {ownership:false,rolecheck:false,massassign:false,ratelimit:false,lockout:false};
+let requestCount = 0;
+let rateCounts = {};
+let lockedOut = {};
+let attackLog = [];
+let currentVuln = 'idor';
+let activeSubTab = 'headers';
+let activeRightTab = 'defender';
+let lastResponse = null;
+
+const COLORS = ["#00e5ff","#4da6ff","#ffc940","#ff8c42","#b06fff","#fb7185"];
+const BGCOLORS = ["rgba(0,229,255,.1)","rgba(77,166,255,.1)","rgba(255,201,64,.1)","rgba(255,140,66,.1)","rgba(176,111,255,.1)","rgba(251,113,133,.1)"];
+
+const VULNS = [
+  {id:'idor',name:'BOLA / IDOR',desc:'Broken Object Level Auth',sev:'critical',method:'GET',urlTemplate:'users/{id}'},
+  {id:'massassign',name:'Mass Assignment',desc:'Write protected fields',sev:'high',method:'PUT',urlTemplate:'users/{id}'},
+  {id:'bfla',name:'BFLA',desc:'Broken Function Level Auth',sev:'high',method:'GET',urlTemplate:'admin/users'},
+  {id:'ratelimit',name:'Rate Limit Bypass',desc:'Flood endpoint w/o limit',sev:'medium',method:'GET',urlTemplate:'users/{id}'},
+];
+
+const SCENARIOS = {
+  idor:['Access own profile','Steal user/2 data','Steal admin data','Enumerate all users'],
+  massassign:['Promote to admin','Inflate balance','Change salary'],
+  bfla:['Access admin panel','List all users (admin only)'],
+  ratelimit:['Single request','Burst x5','Flood x20'],
+};
+
+// ── INIT ──
+function init(){
+  renderVulnList();
+  renderUsers();
+  renderScenarios();
+  updateMethodBadge();
+}
+
+function renderVulnList(){
+  const el = document.getElementById('vulnList');
+  el.innerHTML = VULNS.map(v=>`
+    <div class="vuln-btn ${v.id===currentVuln?'active':''}" onclick="selectVuln('${v.id}')">
+      <span class="vb-icon">${vulnIcon(v.id)}</span>
+      <div class="vb-info"><div class="vb-name">${v.name}</div><div class="vb-desc">${v.desc}</div></div>
+      <span class="vb-sev sev-${v.sev}">${v.sev.toUpperCase()}</span>
+    </div>`).join('');
+}
+
+function vulnIcon(id){return{idor:'⊘',massassign:'✎',bfla:'⬡',ratelimit:'≋'}[id]||'◈'}
+
+function renderUsers(){
+  const el = document.getElementById('userScroll');
+  el.innerHTML = Object.values(DB).map((u,i)=>`
+    <div class="user-card ${loggedInId===u.id?'active':''}" id="uc-${u.id}" onclick="login(${u.id},${i})">
+      <div class="avatar" style="background:${BGCOLORS[i]};color:${COLORS[i]}">${initials(u.name)}</div>
+      <div class="user-info">
+        <div class="user-name">${u.name}</div>
+        <div class="user-sub">uid:${u.id} · ${u.department}</div>
+      </div>
+      <span class="user-role role-${u.role}">${u.role}</span>
+    </div>`).join('');
+}
+
+function renderScenarios(){
+  const strip = document.getElementById('scenarioStrip');
+  const list = SCENARIOS[currentVuln]||[];
+  strip.innerHTML = list.map((s,i)=>`<div class="scenario-chip" onclick="runScenario(${i},'${currentVuln}')">${s}</div>`).join('');
+}
+
+function initials(n){return n.split(' ').map(x=>x[0]).join('')}
+
+function selectVuln(id){
+  currentVuln=id;
+  renderVulnList();
+  renderScenarios();
+  updateMethodBadge();
+  updateUrlForVuln();
+  if(id==='massassign'){showBodyEditor(true)}else{showBodyEditor(false)}
+  document.getElementById('responseArea').innerHTML='<div class="log-empty">// Select a scenario or send a request</div>';
+}
+
+function updateMethodBadge(){
+  const v=VULNS.find(x=>x.id===currentVuln);
+  const mb=document.getElementById('methodBadge');
+  mb.textContent=v?.method||'GET';
+  mb.className='method-badge '+(v?.method==='PUT'?'mb-put':v?.method==='POST'?'mb-post':'mb-get');
+}
+
+function updateUrlForVuln(){
+  const v=VULNS.find(x=>x.id===currentVuln);
+  if(!v)return;
+  const tmpl=v.urlTemplate.replace('{id}',loggedInId||1);
+  document.getElementById('urlPath').value=tmpl;
+}
+
+function showBodyEditor(show){
+  document.getElementById('bodyEditor').style.display=show?'block':'none';
+  document.getElementById('bodyBadge').style.display=show?'inline':'none';
+}
+
+function login(id,colorIdx){
+  loggedInId=id;
+  const u=DB[id];
+  document.getElementById('sessionLabel').textContent=u.name.split(' ')[0];
+  document.getElementById('sessionLabel').style.background=BGCOLORS[colorIdx];
+  document.getElementById('sessionLabel').style.color=COLORS[colorIdx];
+  document.getElementById('tokenPreview').textContent=`Bearer eyJ.uid${id}.${btoa(u.email).slice(0,8)}`;
+  renderUsers();
+  updateUrlForVuln();
+  updateReqHeaders();
+  // default body for mass assign
+  if(currentVuln==='massassign'){
+    document.getElementById('bodyInput').value=JSON.stringify({name:u.name,email:u.email},null,2);
+  }
+}
+
+function updateReqHeaders(){
+  if(!loggedInId){return}
+  const u=DB[loggedInId];
+  const panel=document.getElementById('reqHeadersPanel');
+  const hdrs=[
+    ['Authorization',`Bearer eyJ.uid${loggedInId}.${btoa(u.email).slice(0,8)}`,'sensitive'],
+    ['Content-Type','application/json',''],
+    ['X-Request-ID',`req-${Math.random().toString(36).slice(2,10)}`,''],
+    ['User-Agent','GAMKERS-Lab/2.0',''],
+    ['Accept','application/json',''],
+    ['X-Forwarded-For',`10.0.${loggedInId}.${Math.floor(Math.random()*255)}`,''],
+  ];
+  panel.innerHTML=hdrs.map(([k,v,cls])=>`
+    <div class="hdr-row">
+      <span class="hdr-key">${k}</span>
+      <span class="hdr-val ${cls}">${v}</span>
+    </div>`).join('');
+}
+
+function buildResHeaders(statusCode, userId){
+  return [
+    ['HTTP/1.1',`${statusCode} ${statusText(statusCode)}`,'accent'],
+    ['Content-Type','application/json; charset=utf-8',''],
+    ['X-RateLimit-Limit','5',''],
+    ['X-RateLimit-Remaining',`${Math.max(0,5-(rateCounts[loggedInId]||0))}`,'sensitive'],
+    ['X-Request-ID',`res-${Math.random().toString(36).slice(2,10)}`,''],
+    ['Server','nginx/1.24.0',''],
+    ['X-Response-Time',`${32+Math.floor(Math.random()*80)}ms`,''],
+  ];
+}
+
+function statusText(c){return{200:'OK',403:'Forbidden',429:'Too Many Requests',404:'Not Found',400:'Bad Request'}[c]||''}
+
+// ── RATE LIMITER ──
+function checkRateLimit(){
+  if(!defenses.ratelimit)return false;
+  const now=Date.now();
+  if(!rateCounts._ts||now-rateCounts._ts>10000){rateCounts={_ts:now}}
+  const key=loggedInId;
+  rateCounts[key]=(rateCounts[key]||0)+1;
+  updateRateMeter();
+  if(rateCounts[key]>5){
+    if(defenses.lockout)lockedOut[key]=true;
+    return true;
+  }
+  return false;
+}
+
+function updateRateMeter(){
+  const cnt=rateCounts[loggedInId]||0;
+  const pct=Math.min(100,(cnt/5)*100);
+  const color=pct>=100?'var(--red)':pct>=60?'var(--yellow)':'var(--green)';
+  document.getElementById('rateMeterInline').textContent=`Rate: ${cnt}/5 req`;
+  document.getElementById('rateMeterInline').style.color=color;
+}
+
+// ── CORE REQUEST HANDLER ──
+async function sendRequest(){
+  if(!loggedInId){
+    showAlert('info','← Login as a user first (left panel)','');
+    return;
+  }
+  if(lockedOut[loggedInId]){
+    renderRateLimitResponse(true);
+    return;
+  }
+  const rateLimited=checkRateLimit();
+  const path=document.getElementById('urlPath').value.trim();
+  requestCount++;
+  await sleep(60+Math.random()*180);
+
+  if(rateLimited){renderRateLimitResponse(false);return}
+
+  if(currentVuln==='idor'||currentVuln==='ratelimit') handleIDOR(path);
+  else if(currentVuln==='massassign') handleMassAssign(path);
+  else if(currentVuln==='bfla') handleBFLA(path);
+}
+
+function handleIDOR(path){
+  const match=path.match(/users\/(\d+)/);
+  if(!match){renderError(404,'User not found');return}
+  const targetId=parseInt(match[1]);
+  const target=DB[targetId];
+  if(!target){renderError(404,'User not found');return}
+
+  const isOwn=targetId===loggedInId;
+  const ownershipBlocked=defenses.ownership&&!isOwn;
+
+  if(ownershipBlocked){
+    logAttack('blocked',`IDOR blocked: uid${loggedInId} → uid${targetId}`,'Ownership check prevented access',403);
+    renderForbidden('Ownership check active — you can only access your own data.');
+  }else{
+    const isAttack=!isOwn;
+    if(isAttack)logAttack('attack',`IDOR SUCCESS: uid${loggedInId} → uid${targetId}`,'Sensitive data exfiltrated',200);
+    else logAttack('ok',`Own profile: uid${loggedInId}`,'Normal request',200);
+    renderUserResponse(target,isOwn,isAttack);
+  }
+  updateResHeaders(isOwn&&!ownershipBlocked?200:ownershipBlocked?403:200,targetId);
+}
+
+function handleMassAssign(path){
+  const match=path.match(/users\/(\d+)/);
+  if(!match){renderError(400,'Bad path');return}
+  const targetId=parseInt(match[1]);
+  if(targetId!==loggedInId&&defenses.ownership){
+    logAttack('blocked','IDOR+MassAssign blocked','Cannot modify other users',403);
+    renderForbidden('Cannot modify another user\'s record.');
+    return;
+  }
+  let body={};
+  try{body=JSON.parse(document.getElementById('bodyInput').value||'{}')}catch(e){renderError(400,'Invalid JSON');return}
+
+  const dangerous=['role','salary','balance'];
+  const attemptedDanger=dangerous.filter(k=>k in body);
+  if(defenses.massassign&&attemptedDanger.length>0){
+    logAttack('blocked',`Mass Assignment blocked: tried to write [${attemptedDanger.join(', ')}]`,'Field allowlist prevented privilege escalation',403);
+    renderForbidden(`Field allowlist active. Protected fields rejected: [${attemptedDanger.join(', ')}]`);
+  }else{
+    const merged={...DB[targetId],...body};
+    const changed=Object.keys(body).filter(k=>body[k]!==DB[targetId][k]);
+    if(attemptedDanger.length>0){
+      logAttack('attack',`Mass Assignment: wrote [${attemptedDanger.join(', ')}] on uid${targetId}`,'Privilege escalation / data tamper',200);
+    }else{
+      logAttack('ok',`Normal update: uid${targetId} [${changed.join(', ')}]`,'',200);
+    }
+    renderMassAssignResponse(merged,DB[targetId],attemptedDanger);
+  }
+  updateResHeaders(200,targetId);
+}
+
+function handleBFLA(path){
+  const isAdmin=DB[loggedInId]?.role==='admin';
+  const isManager=DB[loggedInId]?.role==='manager';
+  if(defenses.rolecheck&&!isAdmin&&!isManager){
+    logAttack('blocked',`BFLA blocked: uid${loggedInId} (${DB[loggedInId].role}) → /admin/users`,'Role check enforced',403);
+    renderForbidden('Role check active — admin/manager access only.');
+    return;
+  }
+  if(!isAdmin&&!isManager){
+    logAttack('attack',`BFLA: uid${loggedInId} (${DB[loggedInId].role}) accessed admin endpoint`,'Function-level auth missing',200);
+  }else{
+    logAttack('ok',`Admin access: uid${loggedInId} (${DB[loggedInId].role})`,'Authorized',200);
+  }
+  renderAdminResponse(isAdmin||isManager);
+}
+
+// ── RESPONSE RENDERERS ──
+function renderUserResponse(user,isOwn,isAttack){
+  const area=document.getElementById('responseArea');
+  const banner=isAttack
+    ?`<div class="alert-box alert-vuln"><span class="alert-icon">⚠</span><div><strong>IDOR VULNERABILITY — DATA LEAK</strong><br>You are logged in as uid${loggedInId} (${DB[loggedInId].name}) but received uid${user.id}'s data. Backend skipped ownership check.<br><small style="opacity:.7;margin-top:4px;display:block">Fix: verify <code>request.user.id === resource.owner_id</code> on every object fetch.</small></div></div>`
+    :`<div class="alert-box alert-ok"><span class="alert-icon">✓</span><div><strong>Authorized — own data</strong><br>GET /api/users/${user.id} — accessing your own record.</div></div>`;
+  area.innerHTML=`
+    <div class="res-status-bar">
+      <span class="res-status status-200">200 OK</span>
+      <span class="res-time">${32+Math.floor(Math.random()*80)}ms</span>
+      <span class="res-size">${JSON.stringify(user).length}B</span>
+    </div>
+    ${banner}
+    <div class="json-block">${jsonHighlight(user,isOwn,isAttack)}</div>`;
+}
+
+function renderMassAssignResponse(merged,original,dangerFields){
+  const area=document.getElementById('responseArea');
+  const hasDanger=dangerFields.length>0;
+  const banner=hasDanger
+    ?`<div class="alert-box alert-vuln"><span class="alert-icon">⚠</span><div><strong>MASS ASSIGNMENT — PRIVILEGE ESCALATION</strong><br>Protected fields were written: [${dangerFields.join(', ')}]. Attacker may have changed role, balance, or salary.<br><small style="opacity:.7;margin-top:4px;display:block">Fix: use an allowlist of writable fields — never pass <code>req.body</code> directly to ORM.</small></div></div>`
+    :`<div class="alert-box alert-ok"><span class="alert-icon">✓</span><div><strong>Normal update</strong><br>Only safe fields were modified.</div></div>`;
+  area.innerHTML=`
+    <div class="res-status-bar"><span class="res-status status-200">200 OK</span><span class="res-time">${42+Math.floor(Math.random()*60)}ms</span></div>
+    ${banner}
+    <div class="json-block">${jsonHighlightDiff(merged,original,dangerFields)}</div>`;
+}
+
+function renderAdminResponse(authorized){
+  const area=document.getElementById('responseArea');
+  const banner=!authorized
+    ?`<div class="alert-box alert-vuln"><span class="alert-icon">⚠</span><div><strong>BFLA — BROKEN FUNCTION LEVEL AUTH</strong><br>Regular user accessed an admin-only endpoint. No role check on the route.<br><small style="opacity:.7;display:block;margin-top:4px">Fix: middleware role guard on all /admin/* routes.</small></div></div>`
+    :`<div class="alert-box alert-ok"><span class="alert-icon">✓</span><div><strong>Authorized admin access</strong></div></div>`;
+  const rows=Object.values(DB).map(u=>`  { <span class="jk">"id"</span>:${u.id}, <span class="jk">"name"</span>:<span class="${authorized?'js':'jleak'}">"${u.name}"</span>, <span class="jk">"role"</span>:<span class="${authorized?'js':'jleak'}">"${u.role}"</span>, <span class="jk">"salary"</span>:<span class="${authorized?'jn':'jleak'}">${u.salary}</span> }`).join(',\n');
+  area.innerHTML=`
+    <div class="res-status-bar"><span class="res-status status-200">200 OK</span><span class="res-time">${28+Math.floor(Math.random()*50)}ms</span></div>
+    ${banner}
+    <div class="json-block">[\n${rows}\n]</div>`;
+}
+
+function renderForbidden(msg){
+  const area=document.getElementById('responseArea');
+  area.innerHTML=`
+    <div class="res-status-bar"><span class="res-status status-403">403 Forbidden</span><span class="res-time">${12+Math.floor(Math.random()*20)}ms</span></div>
+    <div class="alert-box alert-ok"><span class="alert-icon">🛡</span><div><strong>Defense Active</strong><br>${msg}</div></div>
+    <div class="json-block"><span class="jk">"error"</span>: <span class="js">"Forbidden"</span>,\n<span class="jk">"message"</span>: <span class="js">"${msg}"</span></div>`;
+}
+
+function renderRateLimitResponse(locked){
+  const area=document.getElementById('responseArea');
+  area.innerHTML=`
+    <div class="res-status-bar"><span class="res-status status-429">429 Too Many Requests</span><span class="res-time">2ms</span></div>
+    <div class="alert-box alert-rate"><span class="alert-icon">⊗</span><div><strong>${locked?'Account Locked Out':'Rate Limit Exceeded'}</strong><br>${locked?'Too many requests — session locked.':'Rate limit: 5 req/10s. Slow down.'}</div></div>
+    <div class="json-block"><span class="jk">"error"</span>: <span class="js">"Too Many Requests"</span>,\n<span class="jk">"retry_after"</span>: <span class="jn">10</span>,\n<span class="jk">"limit"</span>: <span class="jn">5</span></div>`;
+  logAttack('rate',locked?'Session locked out':'Rate limit triggered',`uid${loggedInId} exceeded threshold`,429);
+}
+
+function renderError(code,msg){
+  document.getElementById('responseArea').innerHTML=`
+    <div class="res-status-bar"><span class="res-status status-404">${code}</span></div>
+    <div class="json-block"><span class="jk">"error"</span>: <span class="js">"${msg}"</span></div>`;
+}
+
+function updateResHeaders(statusCode,userId){
+  const panel=document.getElementById('resHeadersPanel');
+  const hdrs=buildResHeaders(statusCode,userId);
+  panel.innerHTML=hdrs.map(([k,v,cls])=>`
+    <div class="hdr-row">
+      <span class="hdr-key">${k}</span>
+      <span class="hdr-val ${cls}">${v}</span>
+    </div>`).join('');
+}
+
+// ── JSON FORMATTERS ──
+function jsonHighlight(u,isOwn,isAttack){
+  const sensitive=['phone','card','balance','salary'];
+  const lines=['{'];
+  Object.entries(u).forEach(([k,v],i,arr)=>{
+    const comma=i<arr.length-1?',':'';
+    const kspan=`<span class="jk">"${k}"</span>`;
+    let vspan;
+    if(typeof v==='number'){
+      const cls=isAttack&&sensitive.includes(k)?'jleak':'jn';
+      vspan=`<span class="${cls}">${v}</span>`;
+    }else{
+      const cls=isAttack&&sensitive.includes(k)?'jleak':isOwn&&k==='name'?'jown':'js';
+      vspan=`<span class="${cls}">"${v}"</span>`;
+    }
+    lines.push(`  ${kspan}: ${vspan}${comma}`);
+  });
+  lines.push('}');
+  return lines.join('\n');
+}
+
+function jsonHighlightDiff(merged,original,dangerFields){
+  const lines=['{'];
+  Object.entries(merged).forEach(([k,v],i,arr)=>{
+    const comma=i<arr.length-1?',':'';
+    const kspan=`<span class="jk">"${k}"</span>`;
+    const changed=original[k]!==v;
+    const isDanger=dangerFields.includes(k);
+    let vspan;
+    if(typeof v==='number'){
+      const cls=isDanger?'jleak':changed?'jmodified':'jn';
+      vspan=`<span class="${cls}">${v}</span>`;
+    }else{
+      const cls=isDanger?'jleak':changed?'jmodified':'js';
+      vspan=`<span class="${cls}">"${v}"</span>`;
+    }
+    const note=isDanger?' <span style="color:var(--red);font-size:10px">← DANGER: modified</span>':changed?' <span style="color:var(--orange);font-size:10px">← changed</span>':'';
+    lines.push(`  ${kspan}: ${vspan}${comma}${note}`);
+  });
+  lines.push('}');
+  return lines.join('\n');
+}
+
+// ── ATTACK LOG ──
+function logAttack(type,msg,detail,code){
+  const now=new Date();
+  const ts=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+  attackLog.unshift({type,msg,detail,code,ts});
+  if(attackLog.length>50)attackLog.pop();
+  renderLog();
+  document.getElementById('logCount').textContent=attackLog.length;
+}
+
+function renderLog(){
+  const panel=document.getElementById('logPanel');
+  if(!attackLog.length){panel.innerHTML='<div class="log-empty" id="logEmpty">// No requests yet</div>';return}
+  panel.innerHTML=attackLog.map(e=>`
+    <div class="log-entry">
+      <span class="log-time">${e.ts}</span>
+      <div class="log-body">
+        <span class="log-tag tag-${e.type}">${e.type.toUpperCase()}</span>
+        <span class="log-msg">${e.msg}</span>
+        ${e.detail?`<div class="log-detail">${e.detail} · ${e.code}</div>`:''}
+      </div>
+    </div>`).join('');
+}
+
+// ── DEFENSE TOGGLES ──
+function toggleDefense(key){
+  defenses[key]=!defenses[key];
+  const tog=document.getElementById('tog-'+key);
+  tog.className='toggle-sw '+(defenses[key]?'on':'off');
+  updateDefenseStatus();
+}
+
+function updateDefenseStatus(){
+  const el=document.getElementById('defenseStatus');
+  const on=Object.values(defenses).filter(Boolean).length;
+  const total=Object.keys(defenses).length;
+  if(on===0){el.className='defense-status vulnerable';el.textContent='⚠ All defenses OFF — fully vulnerable.'}
+  else if(on===total){el.className='defense-status blocked';el.textContent='🛡 All defenses ON — attack surface minimized.'}
+  else{el.className='defense-status';el.style.background='var(--yellow-dim)';el.style.borderColor='rgba(255,201,64,.3)';el.style.color='var(--yellow)';el.textContent=`⚡ Partial defense — ${on}/${total} controls active.`}
+}
+
+// ── QUICK ATTACKS ──
+async function quickAttack(type){
+  if(!loggedInId){alert('Login first!');return}
+  if(type==='idor_sweep'){
+    selectVuln('idor');
+    for(let id=1;id<=6;id++){
+      if(id===loggedInId)continue;
+      document.getElementById('urlPath').value=`users/${id}`;
+      await sleep(350);
+      await sendRequest();
+    }
+  }else if(type==='mass_assign'){
+    selectVuln('massassign');
+    document.getElementById('urlPath').value=`users/${loggedInId}`;
+    document.getElementById('bodyInput').value=JSON.stringify({name:DB[loggedInId].name,role:'admin',balance:9999999,salary:500000},null,2);
+    await sleep(200);
+    await sendRequest();
+  }else if(type==='rate_flood'){
+    selectVuln('ratelimit');
+    for(let i=0;i<8;i++){
+      await sleep(150);
+      await sendRequest();
+    }
+  }else if(type==='admin_esc'){
+    selectVuln('bfla');
+    document.getElementById('urlPath').value='admin/users';
+    await sleep(200);
+    await sendRequest();
+  }
+}
+
+function runScenario(idx,vuln){
+  if(!loggedInId){return}
+  const scenarios={
+    idor:[
+      ()=>{document.getElementById('urlPath').value=`users/${loggedInId}`;sendRequest()},
+      ()=>{const t=Object.keys(DB).find(id=>parseInt(id)!==loggedInId);document.getElementById('urlPath').value=`users/${t}`;sendRequest()},
+      ()=>{document.getElementById('urlPath').value='users/1';sendRequest()},
+      async()=>{for(let i=1;i<=6;i++){document.getElementById('urlPath').value=`users/${i}`;await sleep(300);await sendRequest()}},
+    ],
+    massassign:[
+      ()=>{document.getElementById('bodyInput').value=JSON.stringify({name:DB[loggedInId].name,role:'admin'},null,2);sendRequest()},
+      ()=>{document.getElementById('bodyInput').value=JSON.stringify({balance:9999999},null,2);sendRequest()},
+      ()=>{document.getElementById('bodyInput').value=JSON.stringify({salary:999999},null,2);sendRequest()},
+    ],
+    bfla:[
+      ()=>{document.getElementById('urlPath').value='admin/users';sendRequest()},
+      ()=>{document.getElementById('urlPath').value='admin/users';sendRequest()},
+    ],
+    ratelimit:[
+      ()=>sendRequest(),
+      async()=>{for(let i=0;i<5;i++){await sleep(100);await sendRequest()}},
+      async()=>{for(let i=0;i<20;i++){await sleep(80);await sendRequest()}},
+    ],
+  };
+  (scenarios[vuln]||[])[idx]?.();
+  // highlight active chip
+  document.querySelectorAll('.scenario-chip').forEach((c,i)=>c.classList.toggle('active',i===idx));
+}
+
+// ── TAB SWITCHING ──
+function switchSubTab(tab,el){
+  activeSubTab=tab;
+  document.querySelectorAll('.sub-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('reqHeadersPanel').style.display=tab==='headers'?'block':'none';
+  document.getElementById('bodyEditor').style.display=tab==='body'?'block':'none';
+  document.getElementById('resHeadersPanel').style.display=tab==='res-headers'?'block':'none';
+}
+
+function switchRightTab(tab,el){
+  activeRightTab=tab;
+  document.querySelectorAll('.rt').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('defenderPanel').style.display=tab==='defender'?'flex':'none';
+  document.getElementById('defenderPanel').style.flexDirection=tab==='defender'?'column':'';
+  document.getElementById('logPanel').style.display=tab==='log'?'flex':'none';
+}
+
+function showAlert(type,msg,detail){
+  document.getElementById('responseArea').innerHTML=`
+    <div class="alert-box alert-${type}"><span class="alert-icon">◈</span><div>${msg}${detail?`<br><small>${detail}</small>`:''}</div></div>`;
+}
+
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+
+init();
+</script>
+</body>
+</html>
