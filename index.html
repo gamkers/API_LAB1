@@ -99,9 +99,9 @@ nav{display:flex;align-items:center;gap:0;border-bottom:1px solid var(--border);
 .mb-get{background:var(--green-dim);color:var(--green);border-color:rgba(0,229,160,.3)}
 .mb-put{background:var(--yellow-dim);color:var(--yellow);border-color:rgba(255,201,64,.3)}
 .mb-post{background:var(--purple-dim);color:var(--purple);border-color:rgba(176,111,255,.3)}
-.url-bar{flex:1;background:var(--s2);border:1px solid var(--border);border-radius:4px;display:flex;align-items:center;padding:0 10px;gap:4px;font-size:12px;overflow:hidden}
+.url-bar{flex:1;background:var(--s2);border:1px solid var(--border);border-radius:4px;display:flex;align-items:center;padding:0 10px;gap:4px;font-size:12px;overflow:visible;min-width:0}
 .url-static{color:var(--muted2);white-space:nowrap;flex-shrink:0}
-.url-input{background:transparent;border:none;outline:none;color:var(--yellow);font-family:var(--mono);font-size:12px;font-weight:600;width:60px;padding:7px 0}
+.url-input{background:transparent;border:none;outline:none;color:var(--yellow);font-family:var(--mono);font-size:12px;font-weight:600;flex:1;min-width:0;padding:7px 0}
 .url-extra{color:var(--muted);white-space:nowrap;flex-shrink:0;font-size:11px}
 .send-btn{padding:7px 16px;background:var(--accent);color:#000;border:none;border-radius:4px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.5px;flex-shrink:0;transition:all .15s}
 .send-btn:hover{background:#33ecff;transform:translateY(-1px)}
@@ -215,6 +215,81 @@ nav{display:flex;align-items:center;gap:0;border-bottom:1px solid var(--border);
 .scenario-chip{padding:4px 10px;border-radius:3px;border:1px solid var(--border);background:var(--s2);color:var(--muted2);font-size:10px;cursor:pointer;transition:all .12s;white-space:nowrap;flex-shrink:0}
 .scenario-chip:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
 .scenario-chip.active{border-color:var(--red);color:var(--red);background:var(--red-dim)}
+
+/* Difficulty Selector */
+.diff-bar{display:flex;align-items:center;gap:0;height:100%;border-left:1px solid var(--border)}
+.diff-btn{padding:0 14px;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);cursor:pointer;height:100%;display:flex;align-items:center;transition:all .15s;border-bottom:2px solid transparent;font-family:var(--mono);font-weight:600}
+.diff-btn:hover{color:var(--text);background:var(--s2)}
+.diff-btn.active-easy{color:#00e5a0;border-bottom-color:#00e5a0;background:rgba(0,229,160,.08)}
+.diff-btn.active-medium{color:#ffc940;border-bottom-color:#ffc940;background:rgba(255,201,64,.08)}
+.diff-btn.active-pro{color:#ff8c42;border-bottom-color:#ff8c42;background:rgba(255,140,66,.08)}
+.diff-btn.active-expert{color:#ff4455;border-bottom-color:#ff4455;background:rgba(255,68,85,.08)}
+.diff-icon{margin-right:5px;font-size:12px}
+
+/* UI View */
+.view-toggle { display: flex; gap: 8px; margin-bottom: 12px; }
+.view-btn { padding: 4px 12px; border-radius: 4px; border: 1px solid var(--border); background: var(--s2); color: var(--muted2); font-family: var(--display); font-size: 11px; cursor: pointer; transition: all .15s; font-weight: 700; letter-spacing: 0.5px; }
+.view-btn:hover { background: var(--s3); color: var(--text); border-color: var(--border2); }
+.view-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+
+/* UI Profile View */
+.ui-profile { background: #1f2937; color: #f9fafb; border-radius: 8px; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.2); border: 1px solid #374151; margin-top: 10px; }
+.ui-header { background: #111827; padding: 20px; display: flex; align-items: center; gap: 16px; border-bottom: 1px solid #374151; }
+.ui-avatar { flex-shrink: 0; width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: bold; }
+.ui-title { min-width: 0; }
+.ui-title h2 { margin: 0 0 4px 0; font-size: 20px; font-weight: 600; letter-spacing: -0.5px; color: #f9fafb; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ui-title p { margin: 0; font-size: 13px; color: #9ca3af; text-transform: capitalize; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ui-stats { display: flex; padding: 16px 20px; background: #1f2937; border-bottom: 1px solid #374151; }
+.ui-stat { flex: 1; border-right: 1px solid #374151; }
+.ui-stat:last-child { border-right: none; padding-left: 20px; }
+.ui-stat span { display: block; font-size: 11px; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; font-weight: 600; }
+.ui-stat strong { display: block; font-size: 20px; color: #10b981; font-weight: 700; letter-spacing: -0.5px; }
+.ui-stat:first-child strong { color: #3b82f6; }
+.ui-details { padding: 10px 20px; background: #1f2937; }
+.ui-detail-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #374151; }
+.ui-detail-row:last-child { border-bottom: none; }
+.ui-detail-row span { font-size: 13px; color: #9ca3af; font-weight: 500; }
+.ui-detail-row div { font-size: 14px; color: #e5e7eb; font-weight: 500; text-align: right; }
+.ui-sensitive { font-family: var(--mono); font-size: 13px !important; color: #fb7185 !important; }
+
+/* ── AI Chatbot ── */
+.ai-fab{position:fixed;bottom:24px;right:24px;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;cursor:pointer;z-index:9999;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 4px 20px rgba(99,102,241,.4);transition:all .2s}
+.ai-fab:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(99,102,241,.55)}
+.ai-fab.has-dot::after{content:'';position:absolute;top:2px;right:2px;width:12px;height:12px;border-radius:50%;background:#22c55e;border:2px solid var(--bg)}
+
+.ai-chat{position:fixed;bottom:88px;right:24px;width:380px;height:520px;background:var(--s1);border:1px solid var(--border);border-radius:12px;z-index:9998;display:none;flex-direction:column;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.5)}
+.ai-chat.open{display:flex}
+.ai-chat-header{padding:14px 16px;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.ai-chat-header h3{margin:0;font-size:14px;color:#fff;font-family:var(--display);letter-spacing:.5px;flex:1}
+.ai-chat-header .ai-close{background:none;border:none;color:rgba(255,255,255,.7);font-size:18px;cursor:pointer;padding:0;line-height:1}
+.ai-chat-header .ai-close:hover{color:#fff}
+
+.ai-setup{flex:1;padding:24px 20px;display:flex;flex-direction:column;gap:14px;justify-content:center}
+.ai-setup h4{margin:0;color:#f9fafb;font-size:15px;text-align:center}
+.ai-setup p{margin:0;color:var(--muted2);font-size:11px;text-align:center;line-height:1.5}
+.ai-setup input{background:var(--s2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:var(--text);font-family:var(--mono);font-size:12px;outline:none;width:100%}
+.ai-setup input:focus{border-color:var(--accent)}
+.ai-setup input::placeholder{color:var(--muted)}
+.ai-setup .ai-start-btn{padding:10px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;border-radius:6px;font-family:var(--mono);font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.5px;transition:opacity .15s}
+.ai-setup .ai-start-btn:hover{opacity:.9}
+.ai-setup .ai-note{font-size:9px;color:var(--muted);text-align:center;margin-top:4px}
+
+.ai-messages{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.ai-msg{max-width:88%;padding:8px 12px;border-radius:10px;font-size:12px;line-height:1.6;word-wrap:break-word}
+.ai-msg.user{align-self:flex-end;background:#6366f1;color:#fff;border-bottom-right-radius:3px}
+.ai-msg.bot{align-self:flex-start;background:var(--s3);color:var(--text);border-bottom-left-radius:3px}
+.ai-msg.bot code{background:rgba(0,0,0,.3);padding:1px 4px;border-radius:3px;font-size:11px}
+.ai-msg.bot strong{color:var(--accent)}
+.ai-msg.bot h3{margin:8px 0 4px;font-size:13px;color:#fff;border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:2px}
+.ai-msg.bot hr{border:none;border-top:1px solid rgba(255,255,255,0.1);margin:10px 0}
+.ai-msg.bot ul{margin:4px 0;padding-left:16px}
+.ai-msg.typing{color:var(--muted2);font-style:italic}
+
+.ai-input-bar{padding:10px 12px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0;background:var(--s2)}
+.ai-input-bar input{flex:1;background:var(--s1);border:1px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);font-family:var(--mono);font-size:12px;outline:none}
+.ai-input-bar input:focus{border-color:#6366f1}
+.ai-input-bar button{background:#6366f1;color:#fff;border:none;border-radius:6px;padding:8px 14px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;flex-shrink:0}
+.ai-input-bar button:hover{background:#7c3aed}
 </style>
 </head>
 <body>
@@ -228,7 +303,13 @@ nav{display:flex;align-items:center;gap:0;border-bottom:1px solid var(--border);
     <div class="nav-tab" style="opacity:.4;cursor:default">Auth Bypass</div>
   </div>
   <div class="nav-right">
-    <div class="vuln-indicator">LIVE LAB</div>
+    <div class="diff-bar" id="diffBar">
+      <div class="diff-btn active-easy" onclick="setDifficulty('easy')" id="diff-easy"><span class="diff-icon">★</span>Easy</div>
+      <div class="diff-btn" onclick="setDifficulty('medium')" id="diff-medium"><span class="diff-icon">★★</span>Medium</div>
+      <div class="diff-btn" onclick="setDifficulty('pro')" id="diff-pro"><span class="diff-icon">★★★</span>Pro</div>
+      <div class="diff-btn" onclick="setDifficulty('expert')" id="diff-expert"><span class="diff-icon">🔥</span>Expert</div>
+    </div>
+    <div class="vuln-indicator" id="vulnIndicator">LIVE LAB</div>
     <div class="session-info">Logged in as <span class="session-badge" id="sessionLabel">nobody</span></div>
   </div>
 </nav>
@@ -376,6 +457,72 @@ let currentVuln = 'idor';
 let activeSubTab = 'headers';
 let activeRightTab = 'defender';
 let lastResponse = null;
+let currentResView = 'json';
+let unprotectedHits = 0;
+let lastHitTime = 0;
+let appCrashed = false;
+let currentDifficulty = 'easy';
+
+// Difficulty configs
+const DIFF_CONFIG = {
+  easy: {
+    label: 'Easy',
+    idType: 'plain',       // plain numeric IDs like users/1
+    rateLimit: 5,          // 5 req / window
+    rateWindow: 10000,     // 10s window
+    crashThreshold: 6,     // crash after 6 rapid hits
+    showHints: true,       // show fix hints in alerts
+    autoDefenses: [],      // no auto-enabled defenses
+    showAllUsers: true,    // show all user IDs in sidebar
+    showFieldNames: true,  // show field names in mass assign hint
+  },
+  medium: {
+    label: 'Medium',
+    idType: 'hex',         // hex IDs like users/0x02
+    rateLimit: 4,
+    rateWindow: 8000,
+    crashThreshold: 8,
+    showHints: true,
+    autoDefenses: [],
+    showAllUsers: true,
+    showFieldNames: false, // don't reveal which fields are dangerous
+  },
+  pro: {
+    label: 'Pro',
+    idType: 'uuid',        // mapped UUIDs like users/a3f8...
+    rateLimit: 3,
+    rateWindow: 6000,
+    crashThreshold: 10,
+    showHints: false,      // no fix hints at all
+    autoDefenses: ['ratelimit'], // rate limit is ON, must bypass
+    showAllUsers: false,   // only show logged-in user, must guess others
+    showFieldNames: false,
+  },
+  expert: {
+    label: 'Expert',
+    idType: 'uuid',
+    rateLimit: 2,
+    rateWindow: 5000,
+    crashThreshold: 15,
+    showHints: false,
+    autoDefenses: ['ratelimit','ownership'], // must bypass both
+    showAllUsers: false,
+    showFieldNames: false,
+  },
+};
+
+// UUID/hex maps for obfuscated IDs
+const UUID_MAP = {
+  1: 'a3f8c1d2-7b4e-4a91-bf0c-9e3d5a8f1b2c',
+  2: 'e7b4a9f1-3c8d-42e7-9d1a-6f0b2c5e8a3d',
+  3: 'c1d9e4b7-8a2f-4b63-a5c0-7d3e9f1b4a8c',
+  4: 'f0a3b7c9-2d5e-4f81-b6a4-8c1d3e7f9b2a',
+  5: 'b8c2d6e0-4f1a-4d93-a7b5-9e3f1c8d2a6b',
+  6: 'd4e8f2a6-1b3c-4a75-c9d7-0f5b8e2a4c1d',
+};
+const UUID_REVERSE = Object.fromEntries(Object.entries(UUID_MAP).map(([k,v])=>[v,parseInt(k)]));
+const HEX_MAP = {1:'0x01',2:'0x02',3:'0x03',4:'0x04',5:'0x05',6:'0x06'};
+const HEX_REVERSE = Object.fromEntries(Object.entries(HEX_MAP).map(([k,v])=>[v,parseInt(k)]));
 
 const COLORS = ["#00e5ff","#4da6ff","#ffc940","#ff8c42","#b06fff","#fb7185"];
 const BGCOLORS = ["rgba(0,229,255,.1)","rgba(77,166,255,.1)","rgba(255,201,64,.1)","rgba(255,140,66,.1)","rgba(176,111,255,.1)","rgba(251,113,133,.1)"];
@@ -394,12 +541,127 @@ const SCENARIOS = {
   ratelimit:['Single request','Burst x5','Flood x20'],
 };
 
+// ── DIFFICULTY SYSTEM ──
+function setDifficulty(level){
+  currentDifficulty = level;
+  const conf = DIFF_CONFIG[level];
+  
+  // Reset all defenses first
+  Object.keys(defenses).forEach(k => { defenses[k] = false; });
+  // Apply auto-defenses for this difficulty
+  conf.autoDefenses.forEach(k => { defenses[k] = true; });
+  // Update toggle UI
+  Object.keys(defenses).forEach(k => {
+    const tog = document.getElementById('tog-'+k);
+    if(tog) tog.className = 'toggle-sw ' + (defenses[k] ? 'on' : 'off');
+  });
+  updateDefenseStatus();
+  
+  // Lock auto-enabled defense toggles
+  Object.keys(defenses).forEach(k => {
+    const el = document.querySelector(`[onclick="toggleDefense('${k}')"]`);
+    if(!el) return;
+    if(conf.autoDefenses.includes(k)){
+      el.style.opacity = '0.5';
+      el.style.pointerEvents = 'none';
+      el.title = 'Locked by difficulty — find the bypass!';
+    } else {
+      el.style.opacity = '1';
+      el.style.pointerEvents = 'auto';
+      el.title = '';
+    }
+  });
+  
+  // Update difficulty bar UI
+  document.querySelectorAll('.diff-btn').forEach(b => {
+    b.className = 'diff-btn';
+  });
+  document.getElementById('diff-'+level).className = 'diff-btn active-'+level;
+  
+  // Update indicator
+  const ind = document.getElementById('vulnIndicator');
+  const colors = {easy:'#00e5a0',medium:'#ffc940',pro:'#ff8c42',expert:'#ff4455'};
+  ind.textContent = conf.label.toUpperCase() + ' MODE';
+  ind.style.color = colors[level];
+  
+  // Reset crash state
+  appCrashed = false;
+  unprotectedHits = 0;
+  rateCounts = {};
+  lockedOut = {};
+  updateRateMeter();
+  
+  // Re-render users based on visibility
+  renderUsers();
+  renderScenarios();
+  
+  // Update URL placeholder
+  updateUrlForVuln();
+  
+  // Show difficulty banner in response area
+  const area = document.getElementById('responseArea');
+  trackAi('DIFFICULTY_CHANGE', `Switched to ${level} mode. Auto-defenses: [${conf.autoDefenses.join(', ')||'none'}]. ID type: ${conf.idType}. Rate limit: ${conf.rateLimit}/${conf.rateWindow/1000}s.`);
+  area.innerHTML = `
+    <div class="alert-box alert-info" style="border-color:${colors[level]}40; background:${colors[level]}10; color:${colors[level]}">
+      <span class="alert-icon">◈</span>
+      <div>
+        <strong>Difficulty: ${conf.label}</strong><br>
+        ${getDifficultyDescription(level)}
+      </div>
+    </div>
+    <div class="log-empty">// Send a request to begin</div>`;
+}
+
+function getDifficultyDescription(level){
+  const descs = {
+    easy: 'All defenses OFF. Plain numeric IDs (users/1). Full hints shown. Perfect for beginners learning API vulnerabilities.',
+    medium: 'Hex-encoded IDs (users/0x02). Tighter rate limits. Protected field names hidden. You need to figure out the encoding.',
+    pro: 'UUID-based IDs. Rate limiting is ON (find the bypass!). Only your own profile is visible. No fix hints. Real-world difficulty.',
+    expert: 'UUID IDs + Rate Limit & Ownership checks are ON. You must bypass active defenses to exploit. Minimal information. Good luck.',
+  };
+  return descs[level];
+}
+
+// Resolve path to numeric user ID based on difficulty
+function resolveUserId(path){
+  const conf = DIFF_CONFIG[currentDifficulty];
+  if(conf.idType === 'plain'){
+    const m = path.match(/users\/(\d+)/);
+    return m ? parseInt(m[1]) : null;
+  } else if(conf.idType === 'hex'){
+    const m = path.match(/users\/(0x[0-9a-fA-F]+)/);
+    if(m) return parseInt(m[1], 16);
+    // Also allow plain numeric as fallback
+    const m2 = path.match(/users\/(\d+)/);
+    return m2 ? parseInt(m2[1]) : null;
+  } else { // uuid
+    const m = path.match(/users\/([a-f0-9-]{36})/);
+    if(m) return UUID_REVERSE[m[1]] || null;
+    // Also allow plain numeric as fallback (but it won't match any user)
+    const m2 = path.match(/users\/(\d+)/);
+    if(m2){
+      const id = parseInt(m2[1]);
+      return DB[id] ? id : null; // Still works but user needs to discover UUID
+    }
+    return null;
+  }
+}
+
+// Get the display ID for a user
+function getDisplayId(numericId){
+  const conf = DIFF_CONFIG[currentDifficulty];
+  if(conf.idType === 'hex') return HEX_MAP[numericId] || numericId;
+  if(conf.idType === 'uuid') return UUID_MAP[numericId] || numericId;
+  return numericId;
+}
+
 // ── INIT ──
 function init(){
   renderVulnList();
   renderUsers();
   renderScenarios();
   updateMethodBadge();
+  setDifficulty('easy');
 }
 
 function renderVulnList(){
@@ -416,19 +678,33 @@ function vulnIcon(id){return{idor:'⊘',massassign:'✎',bfla:'⬡',ratelimit:'�
 
 function renderUsers(){
   const el = document.getElementById('userScroll');
-  el.innerHTML = Object.values(DB).map((u,i)=>`
-    <div class="user-card ${loggedInId===u.id?'active':''}" id="uc-${u.id}" onclick="login(${u.id},${i})">
-      <div class="avatar" style="background:${BGCOLORS[i]};color:${COLORS[i]}">${initials(u.name)}</div>
+  const conf = DIFF_CONFIG[currentDifficulty];
+  let users = Object.values(DB);
+  if(!conf.showAllUsers && loggedInId){
+    // Only show logged-in user + one mysterious "hidden" entry
+    users = users.filter(u => u.id === loggedInId);
+  }
+  el.innerHTML = users.map((u,i)=>{
+    const origIdx = u.id - 1;
+    return `
+    <div class="user-card ${loggedInId===u.id?'active':''}" id="uc-${u.id}" onclick="login(${u.id},${origIdx})">
+      <div class="avatar" style="background:${BGCOLORS[origIdx]};color:${COLORS[origIdx]}">${initials(u.name)}</div>
       <div class="user-info">
         <div class="user-name">${u.name}</div>
-        <div class="user-sub">uid:${u.id} · ${u.department}</div>
+        <div class="user-sub">${conf.idType==='plain'?'uid:'+u.id : conf.idType==='hex'?'uid:'+HEX_MAP[u.id] : getDisplayId(u.id).slice(0,8)+'...'} · ${u.department}</div>
       </div>
       <span class="user-role role-${u.role}">${u.role}</span>
-    </div>`).join('');
+    </div>`
+  }).join('') + (!conf.showAllUsers && loggedInId ? `
+    <div style="padding:10px;text-align:center;color:var(--muted);font-size:10px;border:1px dashed var(--border);border-radius:5px;margin-top:4px">? Other users exist — discover their IDs</div>` : '' );
 }
 
 function renderScenarios(){
   const strip = document.getElementById('scenarioStrip');
+  if(currentDifficulty !== 'easy'){
+    strip.innerHTML = `<div style="color:var(--muted);font-size:10px;padding:4px 8px;letter-spacing:.5px;">⊘ Scenario guides hidden on ${DIFF_CONFIG[currentDifficulty].label} — figure it out yourself</div>`;
+    return;
+  }
   const list = SCENARIOS[currentVuln]||[];
   strip.innerHTML = list.map((s,i)=>`<div class="scenario-chip" onclick="runScenario(${i},'${currentVuln}')">${s}</div>`).join('');
 }
@@ -437,6 +713,7 @@ function initials(n){return n.split(' ').map(x=>x[0]).join('')}
 
 function selectVuln(id){
   currentVuln=id;
+  trackAi('SELECT_VULN', `Changed attack type to ${id} (${VULNS.find(v=>v.id===id)?.name})`);
   renderVulnList();
   renderScenarios();
   updateMethodBadge();
@@ -455,7 +732,9 @@ function updateMethodBadge(){
 function updateUrlForVuln(){
   const v=VULNS.find(x=>x.id===currentVuln);
   if(!v)return;
-  const tmpl=v.urlTemplate.replace('{id}',loggedInId||1);
+  const uid = loggedInId || 1;
+  const displayId = getDisplayId(uid);
+  const tmpl=v.urlTemplate.replace('{id}', displayId);
   document.getElementById('urlPath').value=tmpl;
 }
 
@@ -467,6 +746,7 @@ function showBodyEditor(show){
 function login(id,colorIdx){
   loggedInId=id;
   const u=DB[id];
+  trackAi('LOGIN', `Logged in as uid${id} - ${u.name} (${u.role}, ${u.department})`);
   document.getElementById('sessionLabel').textContent=u.name.split(' ')[0];
   document.getElementById('sessionLabel').style.background=BGCOLORS[colorIdx];
   document.getElementById('sessionLabel').style.color=COLORS[colorIdx];
@@ -516,12 +796,13 @@ function statusText(c){return{200:'OK',403:'Forbidden',429:'Too Many Requests',4
 // ── RATE LIMITER ──
 function checkRateLimit(){
   if(!defenses.ratelimit)return false;
+  const conf = DIFF_CONFIG[currentDifficulty];
   const now=Date.now();
-  if(!rateCounts._ts||now-rateCounts._ts>10000){rateCounts={_ts:now}}
+  if(!rateCounts._ts||now-rateCounts._ts>conf.rateWindow){rateCounts={_ts:now}}
   const key=loggedInId;
   rateCounts[key]=(rateCounts[key]||0)+1;
   updateRateMeter();
-  if(rateCounts[key]>5){
+  if(rateCounts[key]>conf.rateLimit){
     if(defenses.lockout)lockedOut[key]=true;
     return true;
   }
@@ -529,39 +810,79 @@ function checkRateLimit(){
 }
 
 function updateRateMeter(){
+  const conf = DIFF_CONFIG[currentDifficulty];
   const cnt=rateCounts[loggedInId]||0;
-  const pct=Math.min(100,(cnt/5)*100);
+  const pct=Math.min(100,(cnt/conf.rateLimit)*100);
   const color=pct>=100?'var(--red)':pct>=60?'var(--yellow)':'var(--green)';
-  document.getElementById('rateMeterInline').textContent=`Rate: ${cnt}/5 req`;
+  document.getElementById('rateMeterInline').textContent=`Rate: ${cnt}/${conf.rateLimit} req`;
   document.getElementById('rateMeterInline').style.color=color;
 }
 
 // ── CORE REQUEST HANDLER ──
 async function sendRequest(){
+  if(appCrashed) return;
   if(!loggedInId){
     showAlert('info','← Login as a user first (left panel)','');
     return;
   }
+  const path=document.getElementById('urlPath').value.trim();
+  const bodyVal=document.getElementById('bodyInput')?.value||'';
+  trackAi('SEND_REQUEST', `${VULNS.find(v=>v.id===currentVuln)?.method||'GET'} /api/${path}${bodyVal.trim()&&bodyVal.trim()!=='{}'?' body='+bodyVal.slice(0,120):''}`);
   if(lockedOut[loggedInId]){
     renderRateLimitResponse(true);
     return;
   }
   const rateLimited=checkRateLimit();
-  const path=document.getElementById('urlPath').value.trim();
+  
+  const now = Date.now();
+  if (now - lastHitTime < 1500) {
+    unprotectedHits++;
+  } else {
+    unprotectedHits = 1;
+  }
+  lastHitTime = now;
+
+  // The app crashes if rate limiting is off and they spam >= threshold
+  const crashTh = DIFF_CONFIG[currentDifficulty].crashThreshold;
+  if (!defenses.ratelimit && unprotectedHits >= crashTh) {
+    appCrashed = true;
+    crashApp();
+    return;
+  }
+
   requestCount++;
   await sleep(60+Math.random()*180);
 
-  if(rateLimited){renderRateLimitResponse(false);return}
+  if(rateLimited){
+    trackAi('RATE_LIMIT_HIT', `Request blocked by rate limiter. Count: ${rateCounts[loggedInId]}/${DIFF_CONFIG[currentDifficulty].rateLimit}. Locked: ${lockedOut[loggedInId]?'YES':'NO'}`);
+    renderRateLimitResponse(false);
+    return;
+  }
 
   if(currentVuln==='idor'||currentVuln==='ratelimit') handleIDOR(path);
   else if(currentVuln==='massassign') handleMassAssign(path);
   else if(currentVuln==='bfla') handleBFLA(path);
 }
 
+function crashApp() {
+  trackAi('SERVER_CRASH', `Server crashed! Rate limiting was OFF and user sent ${unprotectedHits} rapid requests.`);
+  const area = document.getElementById('responseArea');
+  if(!area) return;
+  area.innerHTML = `
+    <div style="background:#7f1d1d; color:#fca5a5; padding:40px 20px; border-radius:8px; border:2px solid #ef4444; font-family:var(--mono); text-align:center; height:100%; display:flex; flex-direction:column; justify-content:center;">
+      <h2 style="font-size:24px; margin-bottom:10px;">💥 SERVER CRASHED 💥</h2>
+      <p style="font-size:14px; line-height:1.6; margin-bottom:20px; color:#fecaca;">
+        Out Of Memory / DB Thread Pool Exhausted.<br>
+        You bypassed the limit and flooded the server because <strong>Rate Limiting</strong> was OFF!
+      </p>
+      <button onclick="appCrashed=false; unprotectedHits=0; document.getElementById('responseArea').innerHTML='<div class=\\'json-block\\'>System rebooted.</div>';" style="padding:10px 20px; background:#fca5a5; color:#7f1d1d; font-weight:bold; border:none; border-radius:4px; font-family:var(--mono); cursor:pointer;">Restart Backend</button>
+    </div>
+  `;
+}
+
 function handleIDOR(path){
-  const match=path.match(/users\/(\d+)/);
-  if(!match){renderError(404,'User not found');return}
-  const targetId=parseInt(match[1]);
+  const targetId = resolveUserId(path);
+  if(targetId===null){renderError(404,'User not found');return}
   const target=DB[targetId];
   if(!target){renderError(404,'User not found');return}
 
@@ -569,21 +890,26 @@ function handleIDOR(path){
   const ownershipBlocked=defenses.ownership&&!isOwn;
 
   if(ownershipBlocked){
+    trackAi('RESPONSE', `IDOR BLOCKED: uid${loggedInId} tried to access uid${targetId} but ownership check prevented it. Got 403.`);
     logAttack('blocked',`IDOR blocked: uid${loggedInId} → uid${targetId}`,'Ownership check prevented access',403);
     renderForbidden('Ownership check active — you can only access your own data.');
   }else{
     const isAttack=!isOwn;
-    if(isAttack)logAttack('attack',`IDOR SUCCESS: uid${loggedInId} → uid${targetId}`,'Sensitive data exfiltrated',200);
-    else logAttack('ok',`Own profile: uid${loggedInId}`,'Normal request',200);
+    if(isAttack){
+      trackAi('RESPONSE', `IDOR SUCCESS! uid${loggedInId} accessed uid${targetId}'s data (${target.name}). Got: name=${target.name}, role=${target.role}, balance=$${target.balance}, card=${target.card}`);
+      logAttack('attack',`IDOR SUCCESS: uid${loggedInId} → uid${targetId}`,'Sensitive data exfiltrated',200);
+    } else {
+      trackAi('RESPONSE', `Own profile accessed: uid${loggedInId} (${target.name}). Normal 200 response.`);
+      logAttack('ok',`Own profile: uid${loggedInId}`,'Normal request',200);
+    }
     renderUserResponse(target,isOwn,isAttack);
   }
   updateResHeaders(isOwn&&!ownershipBlocked?200:ownershipBlocked?403:200,targetId);
 }
 
 function handleMassAssign(path){
-  const match=path.match(/users\/(\d+)/);
-  if(!match){renderError(400,'Bad path');return}
-  const targetId=parseInt(match[1]);
+  const targetId = resolveUserId(path);
+  if(targetId===null){renderError(400,'Bad path');return}
   if(targetId!==loggedInId&&defenses.ownership){
     logAttack('blocked','IDOR+MassAssign blocked','Cannot modify other users',403);
     renderForbidden('Cannot modify another user\'s record.');
@@ -595,17 +921,43 @@ function handleMassAssign(path){
   const dangerous=['role','salary','balance'];
   const attemptedDanger=dangerous.filter(k=>k in body);
   if(defenses.massassign&&attemptedDanger.length>0){
+    trackAi('RESPONSE', `Mass Assignment BLOCKED: tried to write [${attemptedDanger.join(', ')}] but field allowlist prevented it. Got 403.`);
     logAttack('blocked',`Mass Assignment blocked: tried to write [${attemptedDanger.join(', ')}]`,'Field allowlist prevented privilege escalation',403);
     renderForbidden(`Field allowlist active. Protected fields rejected: [${attemptedDanger.join(', ')}]`);
   }else{
-    const merged={...DB[targetId],...body};
-    const changed=Object.keys(body).filter(k=>body[k]!==DB[targetId][k]);
-    if(attemptedDanger.length>0){
-      logAttack('attack',`Mass Assignment: wrote [${attemptedDanger.join(', ')}] on uid${targetId}`,'Privilege escalation / data tamper',200);
-    }else{
-      logAttack('ok',`Normal update: uid${targetId} [${changed.join(', ')}]`,'',200);
+    // REAL WORLD ATTACK FLOW: Parameter Pollution / Body ID Override
+    // The auth check evaluated the URL path ID (which the user owns), 
+    // but the backend ORM uses the 'id' from the JSON payload if provided!
+    let updateDbId = targetId;
+    let polluted = false;
+    if(body.id !== undefined && resolveUserId('users/'+body.id) !== null) {
+       updateDbId = resolveUserId('users/'+body.id);
+       polluted = (updateDbId !== targetId);
     }
-    renderMassAssignResponse(merged,DB[targetId],attemptedDanger);
+    
+    const merged={...DB[updateDbId],...body};
+    const changed=Object.keys(body).filter(k=>body[k]!==DB[updateDbId][k] && k!=='id');
+    
+    if(polluted) {
+       // Apply change to the hijacked victim ID
+      Object.keys(body).forEach(k=>{ if(k!=='id') DB[updateDbId][k]=merged[k]; });
+      trackAi('RESPONSE', `Parameter Pollution SUCCESS! Bypassed ownership check by putting id=${body.id} in body. Hijacked uid${updateDbId}.`);
+      logAttack('attack',`ID Override: Auth passed for uid${targetId}, updated uid${updateDbId}`,'Bypassed ownership check via JSON body ID parameter pollution',200);
+      renderMassAssignResponse(merged,DB[updateDbId],attemptedDanger, `🔥 <strong>Advanced Bypass:</strong> You passed the ownership check on your own URL, but the backend used the <code>id</code> from your JSON body to update another user! This is a classic Parameter Pollution/ORM exploit.`);
+    } else if(attemptedDanger.length>0){
+      // Persist change to in-memory DB so chained attacks work (role change unlocks BFLA etc.)
+      attemptedDanger.forEach(k=>{ DB[targetId][k]=merged[k]; });
+      const isEscalation = 'role' in body;
+      const chainHint = (currentDifficulty==='pro'||currentDifficulty==='expert') && isEscalation
+        ? `⏩ Chain attack: your role is now <strong>${merged.role}</strong> — try accessing <code>admin/users</code> via BFLA next!` : '';
+      trackAi('RESPONSE', `Mass Assignment SUCCESS! Wrote dangerous fields [${attemptedDanger.join(', ')}] on uid${targetId}. DB UPDATED. New values: ${attemptedDanger.map(k=>`${k}=${merged[k]}`).join(', ')}`);
+      logAttack('attack',`Mass Assignment: wrote [${attemptedDanger.join(', ')}] on uid${targetId}`,'Privilege escalation / data tamper — DB updated for session',200);
+      renderMassAssignResponse(merged,DB[targetId],attemptedDanger, chainHint);
+    }else{
+      trackAi('RESPONSE', `Normal update on uid${targetId}: changed [${changed.join(', ')}]. No dangerous fields modified.`);
+      logAttack('ok',`Normal update: uid${targetId} [${changed.join(', ')}]`,'',200);
+      renderMassAssignResponse(merged,DB[targetId],attemptedDanger, '');
+    }
   }
   updateResHeaders(200,targetId);
 }
@@ -614,13 +966,16 @@ function handleBFLA(path){
   const isAdmin=DB[loggedInId]?.role==='admin';
   const isManager=DB[loggedInId]?.role==='manager';
   if(defenses.rolecheck&&!isAdmin&&!isManager){
+    trackAi('RESPONSE', `BFLA BLOCKED: uid${loggedInId} (${DB[loggedInId].role}) tried /admin/users but role check stopped them. Got 403.`);
     logAttack('blocked',`BFLA blocked: uid${loggedInId} (${DB[loggedInId].role}) → /admin/users`,'Role check enforced',403);
     renderForbidden('Role check active — admin/manager access only.');
     return;
   }
   if(!isAdmin&&!isManager){
+    trackAi('RESPONSE', `BFLA SUCCESS! uid${loggedInId} (${DB[loggedInId].role}) accessed admin endpoint and got ALL users' data including salaries.`);
     logAttack('attack',`BFLA: uid${loggedInId} (${DB[loggedInId].role}) accessed admin endpoint`,'Function-level auth missing',200);
   }else{
+    trackAi('RESPONSE', `Admin access by uid${loggedInId} (${DB[loggedInId].role}) — authorized. Got 200.`);
     logAttack('ok',`Admin access: uid${loggedInId} (${DB[loggedInId].role})`,'Authorized',200);
   }
   renderAdminResponse(isAdmin||isManager);
@@ -629,9 +984,59 @@ function handleBFLA(path){
 // ── RESPONSE RENDERERS ──
 function renderUserResponse(user,isOwn,isAttack){
   const area=document.getElementById('responseArea');
+  const conf = DIFF_CONFIG[currentDifficulty];
+  const hintHtml = conf.showHints ? `<br><small style="opacity:.7;margin-top:4px;display:block">Fix: verify <code>request.user.id === resource.owner_id</code> on every object fetch.</small>` : '';
   const banner=isAttack
-    ?`<div class="alert-box alert-vuln"><span class="alert-icon">⚠</span><div><strong>IDOR VULNERABILITY — DATA LEAK</strong><br>You are logged in as uid${loggedInId} (${DB[loggedInId].name}) but received uid${user.id}'s data. Backend skipped ownership check.<br><small style="opacity:.7;margin-top:4px;display:block">Fix: verify <code>request.user.id === resource.owner_id</code> on every object fetch.</small></div></div>`
-    :`<div class="alert-box alert-ok"><span class="alert-icon">✓</span><div><strong>Authorized — own data</strong><br>GET /api/users/${user.id} — accessing your own record.</div></div>`;
+    ?`<div class="alert-box alert-vuln"><span class="alert-icon">⚠</span><div><strong>IDOR VULNERABILITY — DATA LEAK</strong><br>You are logged in as uid${loggedInId} (${DB[loggedInId].name}) but received uid${user.id}'s data. Backend skipped ownership check.${hintHtml}</div></div>`
+    :`<div class="alert-box alert-ok"><span class="alert-icon">✓</span><div><strong>Authorized — own data</strong><br>GET /api/users/${getDisplayId(user.id)} — accessing your own record.</div></div>`;
+    
+  const toggleHtml = `
+    <div class="view-toggle">
+      <button class="view-btn ${currentResView==='json'?'active':''}" onclick="switchResView('json', this)">RAW JSON</button>
+      <button class="view-btn ${currentResView==='ui'?'active':''}" onclick="switchResView('ui', this)">APP UI</button>
+    </div>
+  `;
+
+  const uiViewHtml = `
+    <div id="uiView" class="ui-profile" style="display: ${currentResView==='ui'?'block':'none'};">
+      <div class="ui-header">
+        <div class="ui-avatar">${initials(user.name)}</div>
+        <div class="ui-title">
+          <h2>${user.name}</h2>
+          <p>${user.department} · ${user.role}</p>
+        </div>
+      </div>
+      <div class="ui-stats">
+        <div class="ui-stat">
+          <span>Balance</span>
+          <strong>$${user.balance.toLocaleString()}</strong>
+        </div>
+        <div class="ui-stat">
+          <span>Salary</span>
+          <strong>$${user.salary.toLocaleString()}</strong>
+        </div>
+      </div>
+      <div class="ui-details">
+        <div class="ui-detail-row">
+          <span>Email Address</span>
+          <div>${user.email}</div>
+        </div>
+        <div class="ui-detail-row">
+          <span>Phone Number</span>
+          <div class="ui-sensitive">${user.phone}</div>
+        </div>
+        <div class="ui-detail-row">
+          <span>Credit Card</span>
+          <div class="ui-sensitive">${isAttack ? `<span style="color:#fb7185;text-decoration:underline wavy rgba(251,113,133,0.5)">${user.card}</span>` : user.card}</div>
+        </div>
+        <div class="ui-detail-row">
+          <span>Date of Birth</span>
+          <div>${user.dob}</div>
+        </div>
+      </div>
+    </div>
+  `;
+
   area.innerHTML=`
     <div class="res-status-bar">
       <span class="res-status status-200">200 OK</span>
@@ -639,54 +1044,211 @@ function renderUserResponse(user,isOwn,isAttack){
       <span class="res-size">${JSON.stringify(user).length}B</span>
     </div>
     ${banner}
-    <div class="json-block">${jsonHighlight(user,isOwn,isAttack)}</div>`;
+    ${toggleHtml}
+    <div id="jsonView" class="json-block" style="display: ${currentResView==='json'?'block':'none'};">${jsonHighlight(user,isOwn,isAttack)}</div>
+    ${uiViewHtml}`;
 }
 
-function renderMassAssignResponse(merged,original,dangerFields){
+function renderMassAssignResponse(merged,original,dangerFields, chainHint=''){
   const area=document.getElementById('responseArea');
+  const conf = DIFF_CONFIG[currentDifficulty];
   const hasDanger=dangerFields.length>0;
+  const fieldInfo = conf.showFieldNames ? `Protected fields were written: [${dangerFields.join(', ')}]. Attacker may have changed role, balance, or salary.` : 'Protected fields were overwritten via mass assignment. Privilege escalation detected.';
+  const hintHtml = conf.showHints ? `<br><small style="opacity:.7;margin-top:4px;display:block">Fix: use an allowlist of writable fields — never pass <code>req.body</code> directly to ORM.</small>` : '';
+  const chainHtml = chainHint ? `<div style="margin-top:8px;padding:6px 10px;background:rgba(99,102,241,0.2);border:1px solid #6366f1;border-radius:4px;color:#cbd5e1;font-size:11px;">${chainHint}</div>` : '';
   const banner=hasDanger
-    ?`<div class="alert-box alert-vuln"><span class="alert-icon">⚠</span><div><strong>MASS ASSIGNMENT — PRIVILEGE ESCALATION</strong><br>Protected fields were written: [${dangerFields.join(', ')}]. Attacker may have changed role, balance, or salary.<br><small style="opacity:.7;margin-top:4px;display:block">Fix: use an allowlist of writable fields — never pass <code>req.body</code> directly to ORM.</small></div></div>`
+    ?`<div class="alert-box alert-vuln"><span class="alert-icon">⚠</span><div><strong>MASS ASSIGNMENT — PRIVILEGE ESCALATION</strong><br>${fieldInfo}${hintHtml}${chainHtml}</div></div>`
     :`<div class="alert-box alert-ok"><span class="alert-icon">✓</span><div><strong>Normal update</strong><br>Only safe fields were modified.</div></div>`;
+    
+  const toggleHtml = `
+    <div class="view-toggle">
+      <button class="view-btn ${currentResView==='json'?'active':''}" onclick="switchResView('json', this)">RAW JSON</button>
+      <button class="view-btn ${currentResView==='ui'?'active':''}" onclick="switchResView('ui', this)">APP UI</button>
+    </div>
+  `;
+
+  const uiViewHtml = `
+    <div id="uiView" class="ui-profile" style="display: ${currentResView==='ui'?'block':'none'};">
+      <div class="ui-header">
+        <div class="ui-avatar">${initials(merged.name)}</div>
+        <div class="ui-title">
+          <h2>${merged.name}</h2>
+          <p>${merged.department} · <span style="${dangerFields.includes('role')?'color:#fb7185;font-weight:bold;':''}">${merged.role}</span></p>
+        </div>
+      </div>
+      <div class="ui-stats">
+        <div class="ui-stat">
+          <span>Balance</span>
+          <strong style="${dangerFields.includes('balance')?'color:#fb7185;':''}">$${merged.balance.toLocaleString()}</strong>
+        </div>
+        <div class="ui-stat">
+          <span>Salary</span>
+          <strong style="${dangerFields.includes('salary')?'color:#fb7185;':''}">$${merged.salary.toLocaleString()}</strong>
+        </div>
+      </div>
+      <div class="ui-details">
+        <div class="ui-detail-row">
+          <span>Email Address</span>
+          <div>${merged.email}</div>
+        </div>
+        <div class="ui-detail-row">
+          <span>Phone Number</span>
+          <div class="ui-sensitive">${merged.phone}</div>
+        </div>
+        <div class="ui-detail-row">
+          <span>Credit Card</span>
+          <div class="ui-sensitive">${merged.card}</div>
+        </div>
+        <div class="ui-detail-row">
+          <span>Date of Birth</span>
+          <div>${merged.dob}</div>
+        </div>
+      </div>
+    </div>
+  `;
+
   area.innerHTML=`
     <div class="res-status-bar"><span class="res-status status-200">200 OK</span><span class="res-time">${42+Math.floor(Math.random()*60)}ms</span></div>
     ${banner}
-    <div class="json-block">${jsonHighlightDiff(merged,original,dangerFields)}</div>`;
+    ${toggleHtml}
+    <div id="jsonView" class="json-block" style="display: ${currentResView==='json'?'block':'none'};">${jsonHighlightDiff(merged,original,dangerFields)}</div>
+    ${uiViewHtml}`;
 }
 
 function renderAdminResponse(authorized){
   const area=document.getElementById('responseArea');
+  const conf = DIFF_CONFIG[currentDifficulty];
+  const hintHtml = conf.showHints ? `<br><small style="opacity:.7;display:block;margin-top:4px">Fix: middleware role guard on all /admin/* routes.</small>` : '';
   const banner=!authorized
-    ?`<div class="alert-box alert-vuln"><span class="alert-icon">⚠</span><div><strong>BFLA — BROKEN FUNCTION LEVEL AUTH</strong><br>Regular user accessed an admin-only endpoint. No role check on the route.<br><small style="opacity:.7;display:block;margin-top:4px">Fix: middleware role guard on all /admin/* routes.</small></div></div>`
+    ?`<div class="alert-box alert-vuln"><span class="alert-icon">⚠</span><div><strong>BFLA — BROKEN FUNCTION LEVEL AUTH</strong><br>Regular user accessed an admin-only endpoint. No role check on the route.${hintHtml}</div></div>`
     :`<div class="alert-box alert-ok"><span class="alert-icon">✓</span><div><strong>Authorized admin access</strong></div></div>`;
-  const rows=Object.values(DB).map(u=>`  { <span class="jk">"id"</span>:${u.id}, <span class="jk">"name"</span>:<span class="${authorized?'js':'jleak'}">"${u.name}"</span>, <span class="jk">"role"</span>:<span class="${authorized?'js':'jleak'}">"${u.role}"</span>, <span class="jk">"salary"</span>:<span class="${authorized?'jn':'jleak'}">${u.salary}</span> }`).join(',\n');
+  const rows=Object.values(DB).map(u=>{
+    const displayId = getDisplayId(u.id);
+    const idClass = authorized ? 'js' : 'jleak';
+    const isNewRole = u.id===loggedInId && u.role!==(['user','manager','admin'].includes(u.role)?u.role:'user');
+    return `  { <span class="jk">"id"</span>:<span class="${idClass}">"${displayId}"</span>, <span class="jk">"name"</span>:<span class="${authorized?'js':'jleak'}">"${u.name}"</span>, <span class="jk">"role"</span>:<span class="${authorized?'js':'jleak'}">"${u.role}"</span>, <span class="jk">"salary"</span>:<span class="${authorized?'jn':'jleak'}">${u.salary}</span> }`;
+  }).join(',\n');
+  
+  const toggleHtml = `
+    <div class="view-toggle">
+      <button class="view-btn ${currentResView==='json'?'active':''}" onclick="switchResView('json', this)">RAW JSON</button>
+      <button class="view-btn ${currentResView==='ui'?'active':''}" onclick="switchResView('ui', this)">APP UI</button>
+    </div>
+  `;
+
+  const uiViewHtml = `
+    <div id="uiView" class="ui-admin-panel" style="display: ${currentResView==='ui'?'block':'none'}; border-radius: 8px; overflow: hidden; border: 1px solid #374151; background: #1f2937; margin-top: 10px; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">
+      <div style="background: #111827; padding: 16px 20px; border-bottom: 1px solid #374151;">
+        <h2 style="margin: 0; font-size: 16px; color: #f9fafb;">Admin User Directory</h2>
+      </div>
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; text-align: left; border-collapse: collapse; color: #e5e7eb; font-size: 13px;">
+          <thead>
+            <tr style="border-bottom: 1px solid #374151; background: #1f2937;">
+              <th style="padding: 12px 20px; color: #9ca3af; font-weight: 600; text-transform: uppercase; font-size: 11px;">Name</th>
+              <th style="padding: 12px 20px; color: #9ca3af; font-weight: 600; text-transform: uppercase; font-size: 11px;">Role</th>
+              <th style="padding: 12px 20px; color: #9ca3af; font-weight: 600; text-transform: uppercase; font-size: 11px;">Salary</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${Object.values(DB).map(u => `
+              <tr style="border-bottom: 1px solid #374151;">
+                <td style="padding: 12px 20px; color: ${!authorized?'#fb7185':'#e5e7eb'}; font-weight: 500;">${u.name}</td>
+                <td style="padding: 12px 20px; color: ${!authorized?'#fb7185':'#e5e7eb'};">${u.role}</td>
+                <td style="padding: 12px 20px; color: ${!authorized?'#fb7185':'#10b981'}; font-family: var(--mono);">$${u.salary.toLocaleString()}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+
   area.innerHTML=`
     <div class="res-status-bar"><span class="res-status status-200">200 OK</span><span class="res-time">${28+Math.floor(Math.random()*50)}ms</span></div>
     ${banner}
-    <div class="json-block">[\n${rows}\n]</div>`;
+    ${toggleHtml}
+    <div id="jsonView" class="json-block" style="display: ${currentResView==='json'?'block':'none'};">[\n${rows}\n]</div>
+    ${uiViewHtml}`;
 }
 
 function renderForbidden(msg){
   const area=document.getElementById('responseArea');
+  const toggleHtml = `
+    <div class="view-toggle">
+      <button class="view-btn ${currentResView==='json'?'active':''}" onclick="switchResView('json', this)">RAW JSON</button>
+      <button class="view-btn ${currentResView==='ui'?'active':''}" onclick="switchResView('ui', this)">APP UI</button>
+    </div>
+  `;
+  const uiViewHtml = `
+    <div id="uiView" class="ui-error-page" style="display: ${currentResView==='ui'?'flex':'none'}; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; background: #1f2937; border: 1px solid #374151; border-radius: 8px; margin-top: 10px; text-align: center; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">
+      <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(239,68,68,0.1); color: #ef4444; display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 20px;">
+        🛡️
+      </div>
+      <h2 style="margin: 0 0 8px 0; color: #f9fafb; font-size: 20px;">Access Forbidden</h2>
+      <p style="margin: 0 0 20px 0; color: #9ca3af; font-size: 14px;">${msg}</p>
+      <button style="background: #374151; border: none; padding: 8px 16px; border-radius: 4px; color: #e5e7eb; font-weight: 500; cursor: pointer;">Return to Dashboard</button>
+    </div>
+  `;
+
   area.innerHTML=`
     <div class="res-status-bar"><span class="res-status status-403">403 Forbidden</span><span class="res-time">${12+Math.floor(Math.random()*20)}ms</span></div>
     <div class="alert-box alert-ok"><span class="alert-icon">🛡</span><div><strong>Defense Active</strong><br>${msg}</div></div>
-    <div class="json-block"><span class="jk">"error"</span>: <span class="js">"Forbidden"</span>,\n<span class="jk">"message"</span>: <span class="js">"${msg}"</span></div>`;
+    ${toggleHtml}
+    <div id="jsonView" class="json-block" style="display: ${currentResView==='json'?'block':'none'};"><span class="jk">"error"</span>: <span class="js">"Forbidden"</span>,\n<span class="jk">"message"</span>: <span class="js">"${msg}"</span></div>
+    ${uiViewHtml}`;
 }
 
 function renderRateLimitResponse(locked){
   const area=document.getElementById('responseArea');
+  const toggleHtml = `
+    <div class="view-toggle">
+      <button class="view-btn ${currentResView==='json'?'active':''}" onclick="switchResView('json', this)">RAW JSON</button>
+      <button class="view-btn ${currentResView==='ui'?'active':''}" onclick="switchResView('ui', this)">APP UI</button>
+    </div>
+  `;
+  const uiViewHtml = `
+    <div id="uiView" class="ui-error-page" style="display: ${currentResView==='ui'?'flex':'none'}; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; background: #1f2937; border: 1px solid #374151; border-radius: 8px; margin-top: 10px; text-align: center; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">
+      <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(245,158,11,0.1); color: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 20px;">
+        ⚠️
+      </div>
+      <h2 style="margin: 0 0 8px 0; color: #f9fafb; font-size: 20px;">Maximum Limit Reached</h2>
+      <p style="margin: 0 0 20px 0; color: #9ca3af; font-size: 14px;">${locked ? 'Your account has been temporarily locked due to a massive flood of requests.' : 'You have reached the maximum allowed requests. Please wait 10 seconds.'}</p>
+      <div style="background: rgba(245,158,11,0.1); color: #f59e0b; padding: 8px 12px; border-radius: 4px; font-size: 13px; font-family: var(--mono); font-weight: bold;">Rate Limit Defender Active</div>
+    </div>
+  `;
   area.innerHTML=`
     <div class="res-status-bar"><span class="res-status status-429">429 Too Many Requests</span><span class="res-time">2ms</span></div>
     <div class="alert-box alert-rate"><span class="alert-icon">⊗</span><div><strong>${locked?'Account Locked Out':'Rate Limit Exceeded'}</strong><br>${locked?'Too many requests — session locked.':'Rate limit: 5 req/10s. Slow down.'}</div></div>
-    <div class="json-block"><span class="jk">"error"</span>: <span class="js">"Too Many Requests"</span>,\n<span class="jk">"retry_after"</span>: <span class="jn">10</span>,\n<span class="jk">"limit"</span>: <span class="jn">5</span></div>`;
+    ${toggleHtml}
+    <div id="jsonView" class="json-block" style="display: ${currentResView==='json'?'block':'none'};"><span class="jk">"error"</span>: <span class="js">"Too Many Requests"</span>,\n<span class="jk">"retry_after"</span>: <span class="jn">10</span>,\n<span class="jk">"limit"</span>: <span class="jn">5</span></div>
+    ${uiViewHtml}`;
   logAttack('rate',locked?'Session locked out':'Rate limit triggered',`uid${loggedInId} exceeded threshold`,429);
 }
 
 function renderError(code,msg){
-  document.getElementById('responseArea').innerHTML=`
+  const area=document.getElementById('responseArea');
+  const toggleHtml = `
+    <div class="view-toggle">
+      <button class="view-btn ${currentResView==='json'?'active':''}" onclick="switchResView('json', this)">RAW JSON</button>
+      <button class="view-btn ${currentResView==='ui'?'active':''}" onclick="switchResView('ui', this)">APP UI</button>
+    </div>
+  `;
+  const uiViewHtml = `
+    <div id="uiView" class="ui-error-page" style="display: ${currentResView==='ui'?'flex':'none'}; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; background: #1f2937; border: 1px solid #374151; border-radius: 8px; margin-top: 10px; text-align: center; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">
+      <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(107,114,128,0.1); color: #9ca3af; display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 20px;">
+        🔍
+      </div>
+      <h2 style="margin: 0 0 8px 0; color: #f9fafb; font-size: 20px;">${code} ERROR</h2>
+      <p style="margin: 0 0 20px 0; color: #9ca3af; font-size: 14px;">${msg}</p>
+      <button style="background: #374151; border: none; padding: 8px 16px; border-radius: 4px; color: #e5e7eb; font-weight: 500; cursor: pointer;">Go Back</button>
+    </div>
+  `;
+  area.innerHTML=`
     <div class="res-status-bar"><span class="res-status status-404">${code}</span></div>
-    <div class="json-block"><span class="jk">"error"</span>: <span class="js">"${msg}"</span></div>`;
+    ${toggleHtml}
+    <div id="jsonView" class="json-block" style="display: ${currentResView==='json'?'block':'none'};"><span class="jk">"error"</span>: <span class="js">"${msg}"</span></div>
+    ${uiViewHtml}`;
 }
 
 function updateResHeaders(statusCode,userId){
@@ -769,6 +1331,7 @@ function renderLog(){
 // ── DEFENSE TOGGLES ──
 function toggleDefense(key){
   defenses[key]=!defenses[key];
+  trackAi('TOGGLE_DEFENSE', `${key} defense turned ${defenses[key]?'ON':'OFF'}`);
   const tog=document.getElementById('tog-'+key);
   tog.className='toggle-sw '+(defenses[key]?'on':'off');
   updateDefenseStatus();
@@ -790,20 +1353,20 @@ async function quickAttack(type){
     selectVuln('idor');
     for(let id=1;id<=6;id++){
       if(id===loggedInId)continue;
-      document.getElementById('urlPath').value=`users/${id}`;
+      document.getElementById('urlPath').value=`users/${getDisplayId(id)}`;
       await sleep(350);
       await sendRequest();
     }
   }else if(type==='mass_assign'){
     selectVuln('massassign');
-    document.getElementById('urlPath').value=`users/${loggedInId}`;
+    document.getElementById('urlPath').value=`users/${getDisplayId(loggedInId)}`;
     document.getElementById('bodyInput').value=JSON.stringify({name:DB[loggedInId].name,role:'admin',balance:9999999,salary:500000},null,2);
     await sleep(200);
     await sendRequest();
   }else if(type==='rate_flood'){
     selectVuln('ratelimit');
-    for(let i=0;i<8;i++){
-      await sleep(150);
+    for(let i=0;i<12;i++){
+      await sleep(100);
       await sendRequest();
     }
   }else if(type==='admin_esc'){
@@ -816,12 +1379,14 @@ async function quickAttack(type){
 
 function runScenario(idx,vuln){
   if(!loggedInId){return}
+  const scenarioName = (SCENARIOS[vuln]||[])[idx] || `Scenario ${idx}`;
+  trackAi('RUN_SCENARIO', `Clicked scenario "${scenarioName}" for ${vuln}`);
   const scenarios={
     idor:[
-      ()=>{document.getElementById('urlPath').value=`users/${loggedInId}`;sendRequest()},
-      ()=>{const t=Object.keys(DB).find(id=>parseInt(id)!==loggedInId);document.getElementById('urlPath').value=`users/${t}`;sendRequest()},
-      ()=>{document.getElementById('urlPath').value='users/1';sendRequest()},
-      async()=>{for(let i=1;i<=6;i++){document.getElementById('urlPath').value=`users/${i}`;await sleep(300);await sendRequest()}},
+      ()=>{document.getElementById('urlPath').value=`users/${getDisplayId(loggedInId)}`;sendRequest()},
+      ()=>{const t=Object.keys(DB).find(id=>parseInt(id)!==loggedInId);document.getElementById('urlPath').value=`users/${getDisplayId(parseInt(t))}`;sendRequest()},
+      ()=>{document.getElementById('urlPath').value=`users/${getDisplayId(1)}`;sendRequest()},
+      async()=>{for(let i=1;i<=6;i++){document.getElementById('urlPath').value=`users/${getDisplayId(i)}`;await sleep(300);await sendRequest()}},
     ],
     massassign:[
       ()=>{document.getElementById('bodyInput').value=JSON.stringify({name:DB[loggedInId].name,role:'admin'},null,2);sendRequest()},
@@ -862,6 +1427,18 @@ function switchRightTab(tab,el){
   document.getElementById('logPanel').style.display=tab==='log'?'flex':'none';
 }
 
+function switchResView(type, btn){
+  currentResView = type;
+  const jsonView = document.getElementById('jsonView');
+  const uiView = document.getElementById('uiView');
+  if(jsonView) jsonView.style.display = type === 'json' ? 'block' : 'none';
+  if(uiView) uiView.style.display = type === 'ui' ? 'block' : 'none';
+  if(btn) {
+    btn.parentElement.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+}
+
 function showAlert(type,msg,detail){
   document.getElementById('responseArea').innerHTML=`
     <div class="alert-box alert-${type}"><span class="alert-icon">◈</span><div>${msg}${detail?`<br><small>${detail}</small>`:''}</div></div>`;
@@ -869,7 +1446,259 @@ function showAlert(type,msg,detail){
 
 function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
 
+// ── AI CHATBOT ──
+let aiChatOpen = false;
+let aiConfigured = false;
+let aiUserName = '';
+let aiApiKey = '';
+let aiMessages = [];
+let aiStreaming = false;
+let aiActivityLog = []; // tracks every user action for AI context
+
+function trackAi(action, detail){
+  const entry = { t: new Date().toLocaleTimeString(), action, detail };
+  aiActivityLog.push(entry);
+  if(aiActivityLog.length > 30) aiActivityLog.shift(); // keep last 30
+}
+
+function getFullLabContext(){
+  const conf = DIFF_CONFIG[currentDifficulty];
+  const urlPath = document.getElementById('urlPath')?.value || '';
+  const bodyVal = document.getElementById('bodyInput')?.value || '';
+  const responseText = document.getElementById('responseArea')?.innerText?.slice(0, 500) || '';
+  const rateCount = rateCounts[loggedInId] || 0;
+  
+  let ctx = `\n=== LIVE LAB STATE ===`;
+  ctx += `\nDifficulty: ${currentDifficulty.toUpperCase()} (${conf.label})`;
+  ctx += `\nID Encoding: ${conf.idType} | Rate Limit: ${conf.rateLimit} req/${conf.rateWindow/1000}s | Hints: ${conf.showHints?'ON':'OFF'}`;
+  ctx += `\nAttack Type: ${currentVuln} (${VULNS.find(v=>v.id===currentVuln)?.name || currentVuln})`;
+  ctx += `\nHTTP Method: ${VULNS.find(v=>v.id===currentVuln)?.method || 'GET'}`;
+  ctx += `\nLogged In As: ${loggedInId ? `uid${loggedInId} - ${DB[loggedInId].name} (${DB[loggedInId].role}, ${DB[loggedInId].department})` : 'NOT LOGGED IN'}`;
+  ctx += `\nURL Path Input: ${urlPath}`;
+  if(bodyVal.trim() && bodyVal.trim()!=='{}') ctx += `\nRequest Body: ${bodyVal.slice(0,300)}`;
+  ctx += `\nDefenses: ${Object.entries(defenses).map(([k,v])=>`${k}=${v?'ON':'OFF'}${conf.autoDefenses.includes(k)?' (LOCKED)':''}`).join(', ')}`;
+  ctx += `\nRate Counter: ${rateCount}/${conf.rateLimit} | Locked Out: ${lockedOut[loggedInId]?'YES':'NO'} | App Crashed: ${appCrashed?'YES':'NO'}`;
+  ctx += `\nTotal Requests Sent: ${requestCount}`;
+  ctx += `\nResponse View: ${currentResView}`;
+  ctx += `\n\n--- Last Response (preview) ---`;
+  ctx += `\n${responseText.slice(0,400)}`;
+  
+  if(aiActivityLog.length > 0){
+    ctx += `\n\n--- Recent User Actions (newest last) ---`;
+    ctx += aiActivityLog.slice(-15).map(a => `\n[${a.t}] ${a.action}: ${a.detail}`).join('');
+  }
+  
+  if(attackLog.length > 0){
+    ctx += `\n\n--- Attack Log (last 5) ---`;
+    ctx += attackLog.slice(0,5).map(e => `\n[${e.ts}] ${e.type}: ${e.msg} (${e.code})`).join('');
+  }
+  
+  return ctx;
+}
+
+const AI_SYSTEM_PROMPT = `You are GAMKERS AI — an expert API security mentor embedded inside an interactive API Hacking Lab. Your job is to HELP the user learn, NOT give away answers directly. Guide them with hints and questions.
+
+ABOUT THE LAB:
+This is a simulated API hacking lab with 4 vulnerability categories:
+1. **BOLA/IDOR** (Broken Object Level Authorization): Users can access other users' data by changing the ID in the URL. The fix is ownership verification.
+2. **Mass Assignment**: Users can overwrite protected fields (role, salary, balance) by including them in PUT request body. The fix is field allowlisting.
+3. **BFLA** (Broken Function Level Authorization): Regular users can access admin-only endpoints like /admin/users. The fix is role-based access control.
+4. **Rate Limiting**: Without rate limits, users can flood the server causing crashes (DoS). The fix is request rate limiting.
+
+DIFFICULTY LEVELS:
+- **Easy**: Plain numeric IDs (users/1), all defenses off, full hints
+- **Medium**: Hex-encoded IDs (users/0x01 through 0x06), tighter rate limits
+- **Pro**: UUID-based IDs (must discover the mapping), rate limiting is ON (need to find bypass), only own profile visible
+- **Expert**: UUIDs + rate limiting AND ownership checks are ON (must bypass both)
+
+THE DATABASE has 6 users with IDs 1-6:
+- User 1: Arun Kumar (admin, Engineering)
+- User 2: Divya Nair (user, Marketing)
+- User 3: Karthik Raja (user, Engineering)
+- User 4: Priya Sharma (manager, HR)
+- User 5: Ravi Subbu (user, Support)
+- User 6: Sneha Mehta (user, Finance)
+
+Hex IDs: 0x01 through 0x06
+UUID mappings exist but you should NOT reveal them directly — hint at how to discover them.
+
+DEFENSE TOGGLES (right panel):
+- Object Ownership Check
+- Role-Based Access
+- Field Allowlist
+- Request Rate Limit (5 req/10s on Easy)
+- Auto Lockout
+
+GUIDELINES:
+- Be encouraging and educational
+- Give hints, not solutions. Use Socratic method.
+- If user is stuck, give progressively more specific hints
+- Explain real-world impact of each vulnerability
+- Reference OWASP API Security Top 10 when relevant
+- Keep responses concise (2-4 sentences for hints)
+- Use code formatting for paths, fields, etc.
+- If user asks about a specific difficulty, explain what changes and what they need to figure out
+- NEVER reveal UUID mappings directly. Hint that they should inspect responses or try patterns.
+
+REAL-WORLD CHAIN ATTACKS:
+1. **Role Escalation -> BFLA (Lateral Movement)**
+User promotes themselves to admin via Mass Assignment. Now they must access 'admin/users' via BFLA. When they hit BFLA as an admin, they see the real UUIDs. Guide them to chain these!
+2. **Parameter Pollution / HTTP Body Override (Expert Mode)**
+The Expert mode locks Ownership Check. Tell them they can bypass this: ownership checks often validate the URL param (users/YOUR_UUID), but ORMs rely on the JSON payload. Lead them to inject {"id": "target-uuid"} into the Mass Assign payload while targeting their own URL.`;
+
+function toggleAiChat(){
+  aiChatOpen = !aiChatOpen;
+  document.getElementById('aiChatWindow').classList.toggle('open', aiChatOpen);
+  document.getElementById('aiFab').style.transform = aiChatOpen ? 'rotate(45deg)' : '';
+}
+
+function startAiChat(){
+  const name = document.getElementById('aiNameInput').value.trim();
+  const key = document.getElementById('aiKeyInput').value.trim();
+  if(!name || !key){return}
+  aiUserName = name;
+  aiApiKey = key;
+  aiConfigured = true;
+  document.getElementById('aiSetup').style.display = 'none';
+  document.getElementById('aiChatArea').style.display = 'flex';
+  // Welcome message
+  aiMessages = [{role:'assistant', content:`Hey ${name}! 👋 I'm your API security mentor. I can see you're in the lab — ask me anything about the vulnerabilities, how to exploit them, or hints on the current difficulty level. What are you working on?`}];
+  renderAiMessages();
+}
+
+function renderAiMessages(){
+  const el = document.getElementById('aiMsgArea');
+  el.innerHTML = aiMessages.filter(m=>m.role!=='system').map(m => {
+    const cls = m.role==='user' ? 'user' : 'bot';
+    // Basic markdown: **bold**, `code`, newlines, lists, headings, hr
+    let html = m.content
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/\n?---\n?/g, '<hr>')
+      .replace(/\n?###\s+([^\n]+)/g, '<h3>$1</h3>')
+      .replace(/\n-\s+([^\n]+)/g, '<br>• $1')
+      .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+      .replace(/`([^`]+)`/g,'<code>$1</code>')
+      .replace(/\n/g,'<br>');
+    return `<div class="ai-msg ${cls}">${html}</div>`;
+  }).join('');
+  el.scrollTop = el.scrollHeight;
+}
+
+async function sendAiMessage(){
+  if(aiStreaming) return;
+  const input = document.getElementById('aiMsgInput');
+  const text = input.value.trim();
+  if(!text) return;
+  input.value = '';
+  
+  // Add context about current lab state
+  const fullContext = getFullLabContext();
+  
+  aiMessages.push({role:'user', content: text});
+  renderAiMessages();
+  
+  // Add typing indicator
+  aiMessages.push({role:'assistant', content:'Thinking...'});
+  renderAiMessages();
+  aiStreaming = true;
+  
+  try {
+    const apiMessages = [
+      {role:'system', content: AI_SYSTEM_PROMPT + '\n' + fullContext},
+      ...aiMessages.slice(0,-1).filter(m=>m.role!=='system').slice(-10)
+    ];
+    
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${aiApiKey}`
+      },
+      body: JSON.stringify({
+        model: 'qwen/qwen3-32b',
+        messages: apiMessages,
+        temperature: 0.6,
+        max_completion_tokens: 4096,
+        top_p: 0.95,
+        stream: true,
+        reasoning_effort: 'default'
+      })
+    });
+    
+    if(!res.ok){
+      const err = await res.text();
+      aiMessages[aiMessages.length-1].content = `❌ API Error (${res.status}): Check your API key and try again.`;
+      renderAiMessages();
+      aiStreaming = false;
+      return;
+    }
+    
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let fullText = '';
+    aiMessages[aiMessages.length-1].content = '';
+    
+    while(true){
+      const {done, value} = await reader.read();
+      if(done) break;
+      const chunk = decoder.decode(value, {stream: true});
+      const lines = chunk.split('\n').filter(l => l.startsWith('data: '));
+      for(const line of lines){
+        const data = line.slice(6);
+        if(data === '[DONE]') continue;
+        try {
+          const json = JSON.parse(data);
+          const delta = json.choices?.[0]?.delta?.content || '';
+          fullText += delta;
+          // Filter out <think> tags from the streaming display
+          let cleanedText = fullText.replace(/<think>[\s\S]*?<\/think>/g, '').replace(/<think>[\s\S]*$/, '').trim();
+          aiMessages[aiMessages.length-1].content = cleanedText || (fullText.includes('<think>') ? 'Thinking...' : '');
+          renderAiMessages();
+        } catch(e){}
+      }
+    }
+    if(!fullText) {
+      aiMessages[aiMessages.length-1].content = 'No response received. Try again.';
+    } else {
+      let finalClean = fullText.replace(/<think>[\s\S]*?<\/think>/g, '').replace(/<think>[\s\S]*$/, '').trim();
+      aiMessages[aiMessages.length-1].content = finalClean;
+    }
+    renderAiMessages();
+  } catch(e){
+    aiMessages[aiMessages.length-1].content = `❌ Network error: ${e.message}`;
+    renderAiMessages();
+  }
+  aiStreaming = false;
+}
+
 init();
 </script>
+
+<!-- AI Chatbot -->
+<button class="ai-fab has-dot" id="aiFab" onclick="toggleAiChat()" title="AI Mentor">🤖</button>
+<div class="ai-chat" id="aiChatWindow">
+  <div class="ai-chat-header">
+    <h3>🧠 GAMKERS AI Mentor</h3>
+    <button class="ai-close" onclick="toggleAiChat()">✕</button>
+  </div>
+  <!-- Setup Screen -->
+  <div class="ai-setup" id="aiSetup">
+    <h4>🔐 Connect AI Mentor</h4>
+    <p>Get real-time hints and guidance while you hack.<br>Your API key is only used for this session — never stored.</p>
+    <input type="text" id="aiNameInput" placeholder="Your name" />
+    <input type="password" id="aiKeyInput" placeholder="Groq API Key (gsk_...)" />
+    <button class="ai-start-btn" onclick="startAiChat()">🚀 Start Hacking with AI</button>
+    <div class="ai-note">🔒 Key stays in memory only. Cleared on refresh.</div>
+  </div>
+  <!-- Chat Area (hidden until configured) -->
+  <div id="aiChatArea" style="display:none;flex:1;flex-direction:column;overflow:hidden">
+    <div class="ai-messages" id="aiMsgArea"></div>
+    <div class="ai-input-bar">
+      <input type="text" id="aiMsgInput" placeholder="Ask for a hint..." onkeydown="if(event.key==='Enter')sendAiMessage()" />
+      <button onclick="sendAiMessage()">▶</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
